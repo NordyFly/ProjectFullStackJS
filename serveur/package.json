@@ -4,8 +4,8 @@
   "description": "",
   "main": "bin/www",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node bin/www",
-    "dev": "cross-env NODE_ENV=development nodemon bin/www"
+    "start": "cross-env NODE_ENV=production node serveur/bin/www",
+    "dev": "cross-env NODE_ENV=development nodemon serveur/bin/www"
   },
   "keywords": [],
   "author": "Cornillon Michael <contact@dwaps.fr> (https://dwaps.fr/)",
