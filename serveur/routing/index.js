@@ -22,5 +22,5 @@ router.put('/recipes/:id', updateRecipes);
 // Supprimer une recette
 router.delete('/recipes/:id', deleteRecipes);
 
-router.get('*', (req, res) => res.redirect('/recipes'));
+router.get('*', (req, res) => res.redirect('client/index.html'));
 module.exports = router;
