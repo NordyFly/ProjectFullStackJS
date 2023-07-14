@@ -7,7 +7,7 @@ const {
   getRecipesByIngredientName,
   getRecipesByGastronomyName,
   getNewJsonAddRecipe,
-  getNewJsonDeleteRecipe
+  getNewJsonDeleteRecipe,
 } = require("./../utils/jsonExtract.js");
 
 //console.log("datas json :", jsonData);
@@ -50,21 +50,18 @@ exports.createRecipeCtrl = (req, res) => {
   res.json(recipes);
   */
   const gastronomy = req.query.gastronomy;
-  if(gastronomy) {
+  if (gastronomy) {
     const newJsonData = getNewJsonAddRecipe(jsonData, req.body, gastronomy);
     //jsonData.recipes = newJsonData.jsonData.recipes;
     updateJSON(newJsonData.jsonData);
     const recipesAll = getAllRecipesFromJsonDb(jsonData);
     const id = newJsonData.id;
-    const newRecipe = recipesAll.find(r => r.id === id);
-    console.log('new recipe :', newRecipe);
+    const newRecipe = recipesAll.find((r) => r.id === id);
     res.json(newRecipe);
-  }
-  else {
+  } else {
     res.end();
   }
-  
-}
+};
 
 exports.updateRecipes = (req, res) => {
   const { id } = req.params.id;
@@ -73,7 +70,7 @@ exports.updateRecipes = (req, res) => {
     recipe.id === Number(id) ? updated : recipe
   );
   res.json(recipes);
-}
+};
 
 exports.deleteRecipesCtrl = (req, res) => {
   // ne marche pas
@@ -81,19 +78,22 @@ exports.deleteRecipesCtrl = (req, res) => {
   const id = req.params.id;
   jsonData.recipes = getNewJsonDeleteRecipe(jsonData, id).recipes;
   updateJSON(jsonData);
-  res.json(id);
-}
-
-
+  const toReturn = {
+    code: "200",
+    title: "Ressource recette supprimée.",
+    id: id,
+  };
+  res.json(toReturn);
+};
 
 /**
- * Attention :A ne pas utiliser sans précaution : 
+ * Attention :A ne pas utiliser sans précaution :
  * elle peut casser le data.json !!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
 function updateJSON(newJsonData) {
   writeFileSync(
-    resolve('db','data.json'),
+    resolve("db", "data.json"),
     JSON.stringify(newJsonData, null, 2)
   );
 }
