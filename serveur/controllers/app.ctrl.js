@@ -7,6 +7,7 @@ const {
   getRecipesByIngredientName,
   getRecipesByGastronomyName,
   getNewJsonAddRecipe,
+  getNewJsonDeleteRecipe
 } = require("./../utils/jsonExtract.js");
 
 //console.log("datas json :", jsonData);
@@ -74,21 +75,25 @@ exports.updateRecipes = (req, res) => {
   res.json(recipes);
 }
 
-exports.deleteRecipes = (req, res) => {
-  const { id } = req.params.id;
-  jsonData = jsonData.filter((recipe) => recipe.id !== Number(id));
-  res.json(jsonData);
+exports.deleteRecipesCtrl = (req, res) => {
+  // ne marche pas
+  //jsonData.recipes = jsonData.recipes.filter((r) => r.id !== id);
+  const id = req.params.id;
+  jsonData.recipes = getNewJsonDeleteRecipe(jsonData, id).recipes;
+  updateJSON(jsonData);
+  res.json(id);
 }
 
 
 
 /**
- * A ne pas utiliser : elle va casser le data.json !!!!!!!!!!!!!!!!!!!!!!!!!
+ * Attention :A ne pas utiliser sans précaution : 
+ * elle peut casser le data.json !!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
 function updateJSON(newJsonData) {
   writeFileSync(
     resolve('db','data.json'),
-    JSON.stringify(newJsonData, null, 2) // Utilisez la nouvelle valeur de jsonData
+    JSON.stringify(newJsonData, null, 2)
   );
 }

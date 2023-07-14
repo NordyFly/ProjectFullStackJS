@@ -41,3 +41,21 @@ module.exports.getNewJsonAddRecipe = (recipesJsonDb, recipeToAdd, gastronomy) =>
       }
       return { "jsonData": recipesJsonDb,  "id": recipeToAdd.id};
 }
+
+module.exports.getNewJsonDeleteRecipe = (recipesJsonDb, id) => {
+  for (let i = 0; i < recipesJsonDb.recipes.length; i++) {
+    const gastronomyObj = recipesJsonDb.recipes[i];
+    const recipes = gastronomyObj.recipes;
+    const index = recipes.findIndex(r => r.id === id);
+    if (index !== -1) {
+      recipes.splice(index, 1);
+      if (recipes.length === 0) {
+        // Supprimer la gastronomie si elle ne contient plus de recettes
+        recipesJsonDb.recipes.splice(i, 1);
+      }
+      console.log('recipesJsonDb ', recipesJsonDb)
+      return recipesJsonDb;
+    }
+  }
+  return {};
+}

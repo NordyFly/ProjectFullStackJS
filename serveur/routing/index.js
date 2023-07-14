@@ -3,7 +3,7 @@ const {
   recipesCtrl,
   createRecipeCtrl,
   updateRecipes,
-  deleteRecipes,
+  deleteRecipesCtrl,
 } = require('../controllers/app.ctrl');
 
 
@@ -23,7 +23,7 @@ router.post('/recipes', createRecipeCtrl);
 // Modifier une recette existante
 router.put('/recipes/:id', updateRecipes);
 // Supprimer une recette
-router.delete('/recipes/:id', deleteRecipes);
+router.delete('/recipes/:id', deleteRecipesCtrl);
 
 router.get('*', (req, res) => res.redirect('/recipes'));
 module.exports = router;
