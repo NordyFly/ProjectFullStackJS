@@ -3,19 +3,19 @@ const { randomUUID } = require('crypto');
 // DECLARATIONS
 const { recipes } = require('../db/data.json');
 const { writeFileSync } = require('fs');
-const { getAllRecipesFromJsonDb } = require('./../utils/jsonExtract.js');
+const { getAllRecipesFromJsonDb, getRecipesByIngredientName } = require('./../utils/jsonExtract.js');
 
-      
-function updateJSON() {
-    writeFileSync(
-      resolve('db', 'data.json'),
-      JSON.stringify({ todos,user }, null, 2)
-    );
-  }
   
-  exports.allRecipes = (req, res) => {
+  exports.recipesCtrl = (req, res) => {
     const recipesAll = getAllRecipesFromJsonDb(recipes);
-    res.json(recipesAll);
+    const ingredient = req.query.ingredient;
+    if(ingredient) {
+      res.json(getRecipesByIngredientName(recipes, ingredient));
+    }
+    else {
+      res.json(recipesAll);
+
+    }
   };
 
   exports.filterGastronomy = (req, res) => {
@@ -24,13 +24,17 @@ function updateJSON() {
     res.json(filtered);
   };
 
+
+/** Ne sert pas, ne prend pas en compte le parametre 'ingredient' de l'url  
 exports.filterIngredients = (req, res) => {
+  
   const { ingredient } = req.query;
   console.log("req.query", req.query);
   const filtered = recipes.filter(recipe => recipe.ingredients.includes(ingredient));
   console.log("filtered :", filtered);
   res.json(filtered);
-};
+
+};*/
 
   exports.createRecipes =  (req, res) => {
     recipes.push(req.body);
@@ -51,11 +55,12 @@ exports.filterIngredients = (req, res) => {
   };
 
   /**
-   * A ne pas utiliser : elle va casser le data.json
+   * A ne pas utiliser : elle va casser le data.json !!!!!!!!!!!!!!!!!!!!!!!!!
    */
+  /*
   function updateJSON(){
     writeFileSync(
       resolve('db','data.json'),
       JSON.stringify({recipes}, null, 2)
     );
-  }
+  }*/

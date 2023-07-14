@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const {
-  allRecipes,
+  recipesCtrl,
   filterGastronomy,
   filterIngredients,
   createRecipes,
@@ -10,11 +10,15 @@ const {
 
 
 
-// Récupérer toutes les recettes
-router.get('/recipes', allRecipes);
+// Récupérer toutes les recettes / Attention : les parametre apres '?' sont pris en compte dans cette route
+router.get('/recipes', recipesCtrl);
+
 // Filtrer les recettes par gastronomie et ingrédients
 router.get('/recipes/gastronomy', filterGastronomy);
-router.get('/recipes/ingredients', filterIngredients);
+
+// ci dessous : ne sert pas, ne prend pas en compte le parametre apres le ? de l'url de la requete
+//router.get('/recipes/ingredients', filterIngredients);
+
 // Créer une nouvelle recette
 router.post('/recipes', createRecipes);
 // Modifier une recette existante
