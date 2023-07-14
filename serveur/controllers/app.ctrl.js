@@ -1,8 +1,9 @@
 const { resolve } = require('path');
 const { randomUUID } = require('crypto');
 // DECLARATIONS
-const { todos,user } = require('../db/data.json');
+const { recipes } = require('../db/data.json');
 const { writeFileSync } = require('fs');
+const { getAllRecipesFromJsonDb } = require('./../utils/jsonExtract.js');
 
       
 function updateJSON() {
@@ -13,7 +14,8 @@ function updateJSON() {
   }
   
   exports.allRecipes = (req, res) => {
-    res.json(recipes);
+    const recipesAll = getAllRecipesFromJsonDb(recipes);
+    res.json(recipesAll);
   };
 
   exports.filterGastronomy = (req, res) => {
@@ -48,6 +50,9 @@ exports.filterIngredients = (req, res) => {
     res.json(recipes);
   };
 
+  /**
+   * A ne pas utiliser : elle va casser le data.json
+   */
   function updateJSON(){
     writeFileSync(
       resolve('db','data.json'),
