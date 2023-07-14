@@ -1,22 +1,24 @@
 const { resolve } = require("path");
-const { randomUUID } = require("crypto");
 // DECLARATIONS
-const { recipes } = require("../db/data.json");
+const jsonData = require("./../db/data.json");
 const { writeFileSync } = require("fs");
 const {
   getAllRecipesFromJsonDb,
   getRecipesByIngredientName,
   getRecipesByGastronomyName,
+  getNewJsonAddRecipe,
 } = require("./../utils/jsonExtract.js");
 
+//console.log("datas json :", jsonData);
+
 exports.recipesCtrl = (req, res) => {
-  const recipesAll = getAllRecipesFromJsonDb(recipes);
+  const recipesAll = getAllRecipesFromJsonDb(jsonData);
   const ingredient = req.query.ingredient;
   const gastronomy = req.query.gastronomy;
   if (ingredient) {
-    res.json(getRecipesByIngredientName(recipes, ingredient));
+    res.json(getRecipesByIngredientName(jsonData, ingredient));
   } else if (gastronomy) {
-    res.json(getRecipesByGastronomyName(recipes, gastronomy));
+    res.json(getRecipesByGastronomyName(jsonData, gastronomy));
   } else {
     res.json(recipesAll);
   }
@@ -41,33 +43,52 @@ exports.filterIngredients = (req, res) => {
 
 };*/
 
-exports.createRecipes = (req, res) => {
+exports.createRecipeCtrl = (req, res) => {
+  /* ne marche pas
   recipes.push(req.body);
   res.json(recipes);
-};
+  */
+  const gastronomy = req.query.gastronomy;
+  if(gastronomy) {
+    const newJsonData = getNewJsonAddRecipe(jsonData, req.body, gastronomy);
+    //jsonData.recipes = newJsonData.jsonData.recipes;
+    updateJSON(newJsonData.jsonData);
+    const recipesAll = getAllRecipesFromJsonDb(jsonData);
+    const id = newJsonData.id;
+    const newRecipe = recipesAll.find(r => r.id === id);
+    console.log('new recipe :', newRecipe);
+    res.json(newRecipe);
+  }
+  else {
+    res.end();
+  }
+  
+}
 
 exports.updateRecipes = (req, res) => {
   const { id } = req.params.id;
   const updated = req.body;
-  recipes = recipes.map((recipe) =>
+  jsonData = jsonData.map((recipe) =>
     recipe.id === Number(id) ? updated : recipe
   );
   res.json(recipes);
-};
+}
 
 exports.deleteRecipes = (req, res) => {
   const { id } = req.params.id;
-  recipes = recipes.filter((recipe) => recipe.id !== Number(id));
-  res.json(recipes);
-};
+  jsonData = jsonData.filter((recipe) => recipe.id !== Number(id));
+  res.json(jsonData);
+}
+
+
 
 /**
  * A ne pas utiliser : elle va casser le data.json !!!!!!!!!!!!!!!!!!!!!!!!!
  */
-/*
-  function updateJSON(){
-    writeFileSync(
-      resolve('db','data.json'),
-      JSON.stringify({recipes}, null, 2)
-    );
-  }*/
+
+function updateJSON(newJsonData) {
+  writeFileSync(
+    resolve('db','data.json'),
+    JSON.stringify(newJsonData, null, 2) // Utilisez la nouvelle valeur de jsonData
+  );
+}
