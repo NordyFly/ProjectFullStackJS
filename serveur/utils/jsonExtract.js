@@ -1,7 +1,7 @@
 module.exports.getAllRecipesFromJsonDb = (recipesJsonDb) => {
     let recipes = [];
     recipesJsonDb.forEach(function(recipeGroup) {
-      const countryName = recipeGroup.name;
+      const countryName = recipeGroup.gastronomy;
       const countryRecipes = recipeGroup.recipes;
       countryRecipes.forEach(r => r.gastronomy = countryName);
       recipes = recipes.concat(countryRecipes);
@@ -16,4 +16,9 @@ module.exports.getRecipesByIngredientName = (recipesJsonDb, ingrName) => {
         return recipe.ingredients.some(ingredient => ingredient.name === ingrName);
     });
     return recipesToReturn;
+}
+
+module.exports.getRecipesByGastronomyName = (recipesJsonDb, gastName) => { 
+    const allRecipes = this.getAllRecipesFromJsonDb(recipesJsonDb);
+    return allRecipes.filter((r) => r.gastronomy === gastName);
 }

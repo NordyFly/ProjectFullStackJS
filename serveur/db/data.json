@@ -1,7 +1,7 @@
 {
     "recipes": [
         {
-            "name": "française",
+            "gastronomy": "France",
             "recipes": [
                 {
                     "id": "97e9dad8-fe5a-454d-9797-ed85fecfcb09",
@@ -85,7 +85,7 @@
             ]
         },
         {
-            "name": "chinoise",
+            "gastronomy": "Chine",
             "recipes": [
                 {
                     "id": "ac69eaf6-822e-4d5f-a453-6de5fe225331",
@@ -153,7 +153,7 @@
             ]
         },
         {
-            "name": "italie",
+            "gastronomy": "Italie",
             "recipes": [
                 {
                     "id": "d9a21518-1771-48a0-ba2a-a799a648dbd8",
