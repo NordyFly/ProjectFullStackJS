@@ -5,12 +5,7 @@ const { todos,user } = require('../db/data.json');
 const { writeFileSync } = require('fs');
 
       
-function updateJSON() {
-    writeFileSync(
-      resolve('db', 'data.json'),
-      JSON.stringify({ todos,user }, null, 2)
-    );
-  }
+
   
   exports.allRecipes = (req, res) => {
     res.json(recipes);

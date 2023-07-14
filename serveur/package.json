@@ -8,7 +8,7 @@
     "dev": "cross-env NODE_ENV=development nodemon serveur/bin/www"
   },
   "keywords": [],
-  "author": "Cornillon Michael <contact@dwaps.fr> (https://dwaps.fr/)",
+  "author": "Dahamna Sofiane <dahamnasofiane@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.2",
