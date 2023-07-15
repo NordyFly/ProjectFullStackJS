@@ -2,9 +2,9 @@ Projet JSFullStack en équipe avec Elyes, Noureddine, Sofiane et Jacques - Juill
 
 
 
-
+\\\
 > SERVEUR NodeJs avec Express :
-
+\
 
 * pour installer le serveur :
 
@@ -25,12 +25,12 @@ npm i
 
 npm run dev
 
-
+\\\
 
 
 > CLIENT js pur avec bootstrap :
 
-
+\
 * pour lancer le client :
 
 ouvrir le dossier 'client' dans vs code et lancer 'index.html' avec live server
