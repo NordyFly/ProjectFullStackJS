@@ -25,6 +25,6 @@ npm run dev
 
 * pour lancer le client :
 
-- ouvrir le projet dans vs code et lancer 'index.html' avec live server
+ouvrir le projet dans vs code et lancer 'index.html' avec live server
 
-- ou, lancer 'index.html' avec un serveur web
+ou, lancer 'index.html' avec un serveur web
