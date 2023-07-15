@@ -222,6 +222,22 @@
             }
           ],
           "id": "241f53bd-7ebf-43b7-bb97-bc33aafe7977"
+        },
+        {
+          "title": "Tiramisu",
+          "ingredients": [
+            {
+              "name": "sugar",
+              "quantity": 100,
+              "unit": "UNIT_GRAM"
+            },
+            {
+              "name": "vanilla sugar",
+              "quantity": 1,
+              "unit": "UNIT_PACK"
+            }
+          ],
+          "id": "6d392b0a-719c-4b61-9d0c-d70be31fc72f"
         }
       ]
     }
