@@ -1,10 +1,10 @@
-Projet JSFullStack en équipe avec Elyes, Noureddine, Sofiane et Jacques - Juillet 2023
+Projet JSFullStack en équipe avec Elyes, Noureddine, Sofiane et Jacques - CDAPHP Diginamic - Juillet 2023
 
+<br><br><br>
 
-
-\\\
 > SERVEUR NodeJs avec Express :
-\
+
+<br>
 
 * pour installer le serveur :
 
@@ -20,17 +20,18 @@ ouvrir un terminal dans le dossier 'serveur'
 
 npm i
 
+<br>
 
 * pour lancer le serveur :
 
 npm run dev
 
-\\\
-
+<br><br><br>
 
 > CLIENT js pur avec bootstrap :
 
-\
+<br>
+
 * pour lancer le client :
 
 ouvrir le dossier 'client' dans vs code et lancer 'index.html' avec live server
