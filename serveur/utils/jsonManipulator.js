@@ -46,37 +46,47 @@ module.exports.getRecipesByGastronomyName = (recipesJsonDb, gastName) => {
 };
 
 /**
- * Fonction qui ajoute dans le json recipesJsonDb la recette passés en paramètres dans
+ * Fonction qui ajoute dans le json recipesJsonDb la recette passée en paramètres dans
  * la gastronomy passée en paramètre.
  * Crée une gastronomy si elle n'existe pas déjà.
  * @param {json} recipesJsonDb données json à traiter.
  * @param {json} recipeToAdd recipe à ajouter.
  * @param {string} gastronomy gastronomy dans laquelle est ajoutée la recipe.
  * @returns un objet contenant le json des données mis à jour et l'id de la nouvelle recette.
+ * @throws {Error} de type 400 si l'objet à ajouter est mal formé'
  */
 module.exports.getNewJsonAddRecipe = (
   recipesJsonDb,
   recipeToAdd,
   gastronomy
 ) => {
-  const gastronomyObj = recipesJsonDb.recipes.find(
-    (obj) => obj.gastronomy === gastronomy
-  );
-  recipeToAdd.id = randomUUID();
-  if (gastronomyObj) {
-    gastronomyObj.recipes.push(recipeToAdd);
+  if (
+    recipeToAdd.hasOwnProperty("title") &&
+    recipeToAdd.hasOwnProperty("ingredients") &&
+    recipeToAdd.ingredients.length !== 0
+  ) {
+    const gastronomyObj = recipesJsonDb.recipes.find(
+      (obj) => obj.gastronomy === gastronomy
+    );
+    recipeToAdd.id = randomUUID();
+    if (gastronomyObj) {
+      gastronomyObj.recipes.push(recipeToAdd);
+    } else {
+      // Crée une nouvelle gastronomy
+      const newGastronomyObj = {
+        gastronomy: gastronomy,
+        recipes: [recipeToAdd],
+      };
+      recipesJsonDb.recipes.push(newGastronomyObj);
+    }
+    removeGastronomyFromRecipes(recipesJsonDb);
+    return { jsonData: recipesJsonDb, id: recipeToAdd.id };
   } else {
-    // Crée une nouvelle gastronomy
-    const newGastronomyObj = {
-      gastronomy: gastronomy,
-      recipes: [recipeToAdd],
-    };
-    recipesJsonDb.recipes.push(newGastronomyObj);
+    const error = new Error("body mal formé");
+    error.name = "ValidationError";
+    throw error;
   }
-  removeGastronomyFromRecipes(recipesJsonDb);
-  return { jsonData: recipesJsonDb, id: recipeToAdd.id };
 };
-
 
 /**
  * Fonction qui supprime dans le json recipesJsonDb la recette dont l'id est passé en
@@ -85,6 +95,7 @@ module.exports.getNewJsonAddRecipe = (
  * @param {json} recipesJsonDb données json à traiter.
  * @param {string} id id de la recipe à supprimer.
  * @returns json des données mis à jour.
+ * @throws {Error} de type 404 si l'id est incorrect
  */
 module.exports.getNewJsonDeleteRecipe = (recipesJsonDb, id) => {
   for (let i = 0; i < recipesJsonDb.recipes.length; i++) {
@@ -99,7 +110,7 @@ module.exports.getNewJsonDeleteRecipe = (recipesJsonDb, id) => {
       }
       removeGastronomyFromRecipes(recipesJsonDb);
       return recipesJsonDb;
-    }
+    } 
     else {
       const error = new Error("id not found");
       error.name = "NotFoundError";
@@ -117,18 +128,39 @@ module.exports.getNewJsonDeleteRecipe = (recipesJsonDb, id) => {
  * @param {json} recipeToAdd nouvelle valeurs de la recipe à modifier.
  * @param {string} id id de la recipe à modifier.
  * @returns json des données mis à jour.
+ * @throws {Error} de type 404 si l'id est incorrect ou 400 si le l'objet à traiter 
+ * 'recipeToUpdate' est mal formé
  */
 module.exports.getNewJsonUpdateRecipe = (recipesJsonDb, recipeToUpdate, id) => {
-  for (const recipes of recipesJsonDb.recipes) {
-    for (const subRecipe of recipes.recipes) {
-      // if
-      if (subRecipe.id === id) {
-        subRecipe.title = recipeToUpdate.title;
-        subRecipe.ingredients = recipeToUpdate.ingredients;
+  if (
+    recipeToUpdate.hasOwnProperty("title") &&
+    recipeToUpdate.hasOwnProperty("ingredients") &&
+    recipeToUpdate.ingredients.length !== 0
+  ) {
+    let isPresent = false;
+    for (const recipes of recipesJsonDb.recipes) {
+      for (const subRecipe of recipes.recipes) {
+        // if
+        if (subRecipe.id === id) {
+          isPresent = true;
+          subRecipe.title = recipeToUpdate.title;
+          subRecipe.ingredients = recipeToUpdate.ingredients;
+        }
       }
     }
+    if (isPresent) {
+      return recipesJsonDb;
+    } else {
+      const error = new Error("id not found");
+      error.name = "NotFoundError";
+      throw error;
+    }
+  } 
+  else {
+    const error = new Error("body mal formé");
+    error.name = "ValidationError";
+    throw error;
   }
-  return recipesJsonDb;
 };
 
 /**
