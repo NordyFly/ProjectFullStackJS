@@ -77,6 +77,7 @@ module.exports.getNewJsonAddRecipe = (
   return { jsonData: recipesJsonDb, id: recipeToAdd.id };
 };
 
+
 /**
  * Fonction qui supprime dans le json recipesJsonDb la recette dont l'id est passé en
  * paramètre.
@@ -99,10 +100,16 @@ module.exports.getNewJsonDeleteRecipe = (recipesJsonDb, id) => {
       removeGastronomyFromRecipes(recipesJsonDb);
       return recipesJsonDb;
     }
+    else {
+      const error = new Error("id not found");
+      error.name = "NotFoundError";
+      throw error;
+    }
   }
-  return {};
+  //return {};
 };
 
+/** TODO : Modifier si l'id n'existe renvoyer une erreur 404 */
 /**
  * Fonction qui modifie dans le json recipesJsonDb la recette dont l'id est passé en
  * paramètre.

@@ -312,4 +312,26 @@ le serveur gère 6 requêtes :
 7) gestion des erreurs
 **********************
 
-à finir
+Selon les cas, des erreurs 400, 404 ou 500 sont renvoyées avec le json correspondant :
+
+ex. réponse erreur 400 :
+
+{
+          code: "400",
+          title: "Corps de requête incorrect."
+}
+
+ex. réponse erreur 404 :
+
+{
+        code: "404",
+        title: "Ressource introuvable."
+}
+
+ex. réponse erreur 500 :
+
+{
+        code: "500",
+        title: "Erreur serveur."
+}
+
