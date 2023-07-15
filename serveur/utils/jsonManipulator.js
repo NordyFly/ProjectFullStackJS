@@ -1,5 +1,10 @@
 const { randomUUID } = require("crypto");
 
+/**
+ * Fonction qui extrait et renvoie toutes les recipe du json passé en paramètre.
+ * @param {json} recipesJsonDb données json à traiter.
+ * @returns tableau de recipe extrait du json.
+ */
 module.exports.getAllRecipesFromJsonDb = (recipesJsonDb) => {
   let recipes = [];
   recipesJsonDb.recipes.forEach(function (recipeGroup) {
@@ -11,6 +16,13 @@ module.exports.getAllRecipesFromJsonDb = (recipesJsonDb) => {
   return recipes;
 };
 
+/**
+ * Fonction qui extrait et renvoie les recipe du json passé en paramètre qui contiennent
+ * l'ingrédient passé en paramètre.
+ * @param {json} recipesJsonDb données json à traiter.
+ * @param {string} ingrName nom de l'ingredient à filtrer
+ * @returns
+ */
 module.exports.getRecipesByIngredientName = (recipesJsonDb, ingrName) => {
   const allRecipes = this.getAllRecipesFromJsonDb(recipesJsonDb);
   const recipesToReturn = allRecipes.filter((recipe) => {
@@ -21,11 +33,27 @@ module.exports.getRecipesByIngredientName = (recipesJsonDb, ingrName) => {
   return recipesToReturn;
 };
 
+/**
+ * Fonction qui extrait et renvoie les recipe du json passé en paramètre qui
+ * sont dans la gastronomy passée en paramètre.
+ * @param {json} recipesJsonDb données json à traiter.
+ * @param {string} gastName nom de la gastronomie à filtrer
+ * @returns
+ */
 module.exports.getRecipesByGastronomyName = (recipesJsonDb, gastName) => {
   const allRecipes = this.getAllRecipesFromJsonDb(recipesJsonDb);
   return allRecipes.filter((r) => r.gastronomy === gastName);
 };
 
+/**
+ * Fonction qui ajoute dans le json recipesJsonDb la recette passés en paramètres dans
+ * la gastronomy passée en paramètre.
+ * Crée une gastronomy si elle n'existe pas déjà.
+ * @param {json} recipesJsonDb données json à traiter.
+ * @param {json} recipeToAdd recipe à ajouter.
+ * @param {string} gastronomy gastronomy dans laquelle est ajoutée la recipe.
+ * @returns un objet contenant le json des données mis à jour et l'id de la nouvelle recette.
+ */
 module.exports.getNewJsonAddRecipe = (
   recipesJsonDb,
   recipeToAdd,
@@ -38,18 +66,25 @@ module.exports.getNewJsonAddRecipe = (
   if (gastronomyObj) {
     gastronomyObj.recipes.push(recipeToAdd);
   } else {
-    // Si la gastronomie n'existe pas, on crée une nouvelle entrée pour cette gastronomie
+    // Crée une nouvelle gastronomy
     const newGastronomyObj = {
       gastronomy: gastronomy,
       recipes: [recipeToAdd],
     };
     recipesJsonDb.recipes.push(newGastronomyObj);
   }
-  // enlever la propriete gastronomy des recipes contenues dans recipes
   removeGastronomyFromRecipes(recipesJsonDb);
   return { jsonData: recipesJsonDb, id: recipeToAdd.id };
 };
 
+/**
+ * Fonction qui supprime dans le json recipesJsonDb la recette dont l'id est passé en
+ * paramètre.
+ * Supprime la gastronomy si elle ne contient plus de recipe.
+ * @param {json} recipesJsonDb données json à traiter.
+ * @param {string} id id de la recipe à supprimer.
+ * @returns json des données mis à jour.
+ */
 module.exports.getNewJsonDeleteRecipe = (recipesJsonDb, id) => {
   for (let i = 0; i < recipesJsonDb.recipes.length; i++) {
     const gastronomyObj = recipesJsonDb.recipes[i];
@@ -58,10 +93,9 @@ module.exports.getNewJsonDeleteRecipe = (recipesJsonDb, id) => {
     if (index !== -1) {
       recipes.splice(index, 1);
       if (recipes.length === 0) {
-        // Supprimer la gastronomie si elle ne contient plus de recettes
+        // Supprimer la gastronomie si elle ne contient plus de recipe
         recipesJsonDb.recipes.splice(i, 1);
       }
-      // enlever la propriete gastronomy des recipes contenues dans recipes
       removeGastronomyFromRecipes(recipesJsonDb);
       return recipesJsonDb;
     }
@@ -69,8 +103,15 @@ module.exports.getNewJsonDeleteRecipe = (recipesJsonDb, id) => {
   return {};
 };
 
+/**
+ * Fonction qui modifie dans le json recipesJsonDb la recette dont l'id est passé en
+ * paramètre.
+ * @param {json} recipesJsonDb données json à traiter.
+ * @param {json} recipeToAdd nouvelle valeurs de la recipe à modifier.
+ * @param {string} id id de la recipe à modifier.
+ * @returns json des données mis à jour.
+ */
 module.exports.getNewJsonUpdateRecipe = (recipesJsonDb, recipeToUpdate, id) => {
-  
   for (const recipes of recipesJsonDb.recipes) {
     for (const subRecipe of recipes.recipes) {
       // if
@@ -81,28 +122,19 @@ module.exports.getNewJsonUpdateRecipe = (recipesJsonDb, recipeToUpdate, id) => {
     }
   }
   return recipesJsonDb;
-  
-/*
-  recipesJsonDb.recipes.forEach(subRecipes => {
-    subRecipes.forEach(recipe => {
-      if (recipe.id === id) {
-        recipe.title = recipeToUpdate.title;
-        recipe.ingredients = recipeToUpdate.ingredients;
-      }
-    })
-  });
-
-  return recipesJsonDb;
-  */
 };
 
+/**
+ * Fonction qui supprime du json à traiter la propriété 'gastronomy' avant de le renvoyer.
+ * Pour ne pas modifier la structure de data.json.
+ * @param {json} recipesJsonDb données json à traiter.
+ * @returns json des données mis à jour.
+ */
 function removeGastronomyFromRecipes(recipesJsonDb) {
   for (const recipe of recipesJsonDb.recipes) {
     for (const subRecipe of recipe.recipes) {
       delete subRecipe.gastronomy;
     }
   }
-
-  // Return the modified JSON object
   return recipesJsonDb;
 }
