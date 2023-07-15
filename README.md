@@ -1,4 +1,4 @@
-Projet JSFullStack en équipe avec Elyes, Noureddine, Sofiane et Jacques - CDAPHP Diginamic - Juillet 2023
+Projet JSFullStack - CDAPHP Diginamic - Juillet 2023
 
 <br><br><br>
 
