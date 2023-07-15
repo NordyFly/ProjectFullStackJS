@@ -2,7 +2,7 @@ const router = require('express').Router();
 const {
   recipesCtrl,
   createRecipeCtrl,
-  updateRecipes,
+  updateRecipesCtrl,
   deleteRecipesCtrl,
 } = require('../controllers/app.ctrl');
 
@@ -21,7 +21,7 @@ router.get('/recipes', recipesCtrl);
 // Créer une nouvelle recette
 router.post('/recipes', createRecipeCtrl);
 // Modifier une recette existante
-router.put('/recipes/:id', updateRecipes);
+router.patch('/recipes/:id', updateRecipesCtrl);
 // Supprimer une recette
 router.delete('/recipes/:id', deleteRecipesCtrl);
 

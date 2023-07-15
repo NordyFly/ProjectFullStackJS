@@ -45,6 +45,8 @@ module.exports.getNewJsonAddRecipe = (
     };
     recipesJsonDb.recipes.push(newGastronomyObj);
   }
+  // enlever la propriete gastronomy des recipes contenues dans recipes
+  removeGastronomyFromRecipes(recipesJsonDb);
   return { jsonData: recipesJsonDb, id: recipeToAdd.id };
 };
 
@@ -59,8 +61,48 @@ module.exports.getNewJsonDeleteRecipe = (recipesJsonDb, id) => {
         // Supprimer la gastronomie si elle ne contient plus de recettes
         recipesJsonDb.recipes.splice(i, 1);
       }
+      // enlever la propriete gastronomy des recipes contenues dans recipes
+      removeGastronomyFromRecipes(recipesJsonDb);
       return recipesJsonDb;
     }
   }
   return {};
 };
+
+module.exports.getNewJsonUpdateRecipe = (recipesJsonDb, recipeToUpdate, id) => {
+  
+  for (const recipes of recipesJsonDb.recipes) {
+    for (const subRecipe of recipes.recipes) {
+      // if
+      if (subRecipe.id === id) {
+        subRecipe.title = recipeToUpdate.title;
+        subRecipe.ingredients = recipeToUpdate.ingredients;
+      }
+    }
+  }
+  return recipesJsonDb;
+  
+/*
+  recipesJsonDb.recipes.forEach(subRecipes => {
+    subRecipes.forEach(recipe => {
+      if (recipe.id === id) {
+        recipe.title = recipeToUpdate.title;
+        recipe.ingredients = recipeToUpdate.ingredients;
+      }
+    })
+  });
+
+  return recipesJsonDb;
+  */
+};
+
+function removeGastronomyFromRecipes(recipesJsonDb) {
+  for (const recipe of recipesJsonDb.recipes) {
+    for (const subRecipe of recipe.recipes) {
+      delete subRecipe.gastronomy;
+    }
+  }
+
+  // Return the modified JSON object
+  return recipesJsonDb;
+}

@@ -8,9 +8,13 @@ const {
   getRecipesByGastronomyName,
   getNewJsonAddRecipe,
   getNewJsonDeleteRecipe,
+  getNewJsonUpdateRecipe
 } = require("./../utils/jsonExtract.js");
 
-//console.log("datas json :", jsonData);
+
+/**
+ * TODO : mettre en place la gestion des erreurs !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ */
 
 exports.recipesCtrl = (req, res) => {
   const recipesAll = getAllRecipesFromJsonDb(jsonData);
@@ -52,7 +56,6 @@ exports.createRecipeCtrl = (req, res) => {
   const gastronomy = req.query.gastronomy;
   if (gastronomy) {
     const newJsonData = getNewJsonAddRecipe(jsonData, req.body, gastronomy);
-    //jsonData.recipes = newJsonData.jsonData.recipes;
     updateJSON(newJsonData.jsonData);
     const recipesAll = getAllRecipesFromJsonDb(jsonData);
     const id = newJsonData.id;
@@ -63,13 +66,14 @@ exports.createRecipeCtrl = (req, res) => {
   }
 };
 
-exports.updateRecipes = (req, res) => {
-  const { id } = req.params.id;
-  const updated = req.body;
-  jsonData = jsonData.map((recipe) =>
-    recipe.id === Number(id) ? updated : recipe
-  );
-  res.json(recipes);
+exports.updateRecipesCtrl = (req, res) => {
+  const id = req.params.id;
+  const reqBody = req.body;
+  const newJsonData = getNewJsonUpdateRecipe(jsonData, reqBody, id);
+  updateJSON(newJsonData);
+  const recipesAll = getAllRecipesFromJsonDb(jsonData);
+  const updatedRecipe = recipesAll.find((r) => r.id === id);
+  res.json(updatedRecipe);
 };
 
 exports.deleteRecipesCtrl = (req, res) => {
