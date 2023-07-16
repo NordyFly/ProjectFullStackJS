@@ -1,11 +1,14 @@
 import { createMarkup } from "../utils/dom.js";
+
+//const url = "/recipes"
+const endPoint = "https://localhost:4443/client"
 /** 
  * Construction des container 
 */
 const container = createMarkup('div', '', document.body, [{ class: "container" }]);
 const sctnTitle = createMarkup('section', '', container, [{ class: "row" }]);
 const sctnSelect = createMarkup('section', '', container, [{ class: "d-flex flex-row justify-content-around my-5" }]);
-const sctnRecipes = createMarkup('section', '', container, [{ class: "row" }]);
+const sctnRecipes = createMarkup('section', '', container, [{ class: "row", id: 'section-card-recipes' }]);
 
 /**
  * Insertion du Titre
@@ -22,13 +25,13 @@ const selectShowRecipes = createMarkup('select', 'Choisir une recette', divConte
  */
 const divContentsctnSelectPerCountry = createMarkup('div', '', sctnSelect, [{ class: "d-flex justify-content-center flex-column" }]);
 const labelPerCountry = createMarkup('label', 'Selectionner un pays', divContentsctnSelectPerCountry, [{ class: "form-control" }]);
-const selectPerCountry = createMarkup('select', 'Selectionner un pays', divContentsctnSelectPerCountry, [{ class: "form-select" }]);
+const selectPerCountry = createMarkup('select', 'Selectionner un pays', divContentsctnSelectPerCountry, [{ class: "form-select", id: 'select-per-country' }]);
 /**
  * creation select show per ingredient
  */
 const divContentsctnSelectPerIngredient = createMarkup('div', '', sctnSelect, [{ class: "d-flex justify-content-center flex-column" }]);
 const labelPerIngredient = createMarkup('label', 'Selectionner un Ingredient', divContentsctnSelectPerIngredient, [{ class: "form-control" }]);
-const selectPerIngrendient = createMarkup('select', 'Selectionner un Ingredient', divContentsctnSelectPerIngredient, [{ class: "form-select" }]);
+const selectPerIngrendient = createMarkup('select', 'Selectionner un Ingredient', divContentsctnSelectPerIngredient, [{ class: "form-select", id: 'select-per-ingredient' }]);
 /**
  * creation button creation recette et listener sur le bouton
  */
@@ -41,7 +44,7 @@ document.getElementById('btnCreateRecipes').addEventListener('click', showModalC
  * Function déclencher par le listener sur le button creation recette
  */
 function showModalCreateRecipes() {
-    
+
     const modal = document.getElementById('myModal');
     const bootstrapModal = new bootstrap.Modal(modal);
     bootstrapModal.show();
@@ -59,10 +62,173 @@ document.getElementById('btn-add-ingredient').addEventListener('click', addInput
 /**
  * Function déclencher par le listener sur le button ajout d'ingredient
  */
- function addInputIngredient() {
+function addInputIngredient() {
     const divCreateRecipesModal = document.getElementById('bloc-ingredient');
-    const divCreateRecipesModalInput = createMarkup('div','',divCreateRecipesModal,[{class:"d-flex flex-row"}])
-    createMarkup('input','',divCreateRecipesModalInput,[{class:"form-control my-1 mx-1"}]);
-    createMarkup('select','',divCreateRecipesModalInput,[{class:"form-select my-1 mx-1"}]);
-    createMarkup('select','',divCreateRecipesModalInput,[{class:"form-select my-1 mx-1"}]);
+    const divCreateRecipesModalInput = createMarkup('div', '', divCreateRecipesModal, [{ class: "d-flex flex-row" }])
+    createMarkup('input', '', divCreateRecipesModalInput, [{ class: "form-control my-1 mx-1", placeholder: "ingredient" }]);
+    createMarkup('input', '', divCreateRecipesModalInput, [{ class: " my-1 mx-1",type:'number'}]);
+    createMarkup('select', 'Choisir une uniter', divCreateRecipesModalInput, [{ class: "form-select my-1 mx-1" }]);
 }
+ 
+
+
+
+if (document.location.href.toString().includes("client")) {
+    console.log(" ligne 73",);
+    // fait requete pour recuperer les recette
+    getAllRecipes();
+
+}
+
+/**
+ * fonction asynchrone permetant la recuperation des recette et le declenchement de 4 fonction 
+ */
+async function getAllRecipes() {
+    try {
+        const response = await fetch(`${endPoint}/recipes`, {
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
+
+        const dataRecipes = await response.json();
+        createRecipesCard(dataRecipes);
+        fillSelectPerCountry(dataRecipes);
+        fillSelectPerIngredient(dataRecipes);
+        fillSelectUnitCreateRecipes(dataRecipes);
+        console.log("ligne 97", dataRecipes);
+
+    }
+    catch (error) {
+        console.log(`erreur`, error);
+    }
+}
+
+/**
+ * Création des cards avec les recettes avec conversion des uniter
+ */
+function createRecipesCard(dataRecipes) {
+    const sctnRecipes = document.getElementById('section-card-recipes');
+    let htmlContent = "";
+    dataRecipes.forEach(recipe => {
+      let ingredientsHtml = "";
+      recipe.ingredients.forEach(ingredient => {
+        const convertedUnit = convertUnit(ingredient.unit);
+        ingredientsHtml += `<li class="list-group-item my-2 rounded border border-black">${ingredient.name} : ${ingredient.quantity} ${convertedUnit}</li>`;
+      });
+      htmlContent += `<div class="card mx-2 my-2" style="width: 18rem;">
+        <div class="card-body">
+          <h4 class="card-title">Pays : ${recipe.gastronomy}</h4>
+          <h5 class="card-title">${recipe.title}</h5>
+          <ul class="list-group">${ingredientsHtml}</ul>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>`;
+    });
+    sctnRecipes.innerHTML = htmlContent;
+  }
+  
+
+
+
+/**
+ * Remplissage du select par pays 
+ */
+function fillSelectPerCountry(dataRecipes) {
+    console.log("ligne 134 FillSelectPerCountry:", dataRecipes);
+    const selectPerCountry = document.getElementById("select-per-country");
+    let htmlContent = "<option value='empty' selected>Choisir un Pays</option>";
+    let gastronomies = []; // Tableau pour stocker les gastronomies déjà ajoutées
+    dataRecipes.forEach(u => {
+        if (!gastronomies.includes(u.gastronomy)) {
+            htmlContent += `<option value="${u.id}">${u.gastronomy}</option>`;
+            gastronomies.push(u.gastronomy);
+        }
+    });
+    selectPerCountry.innerHTML = htmlContent;
+}
+
+
+/**
+ * Remplissage du select par ingredient
+ */
+function fillSelectPerIngredient(dataRecipes) {
+    console.log("ligne 152 FillSelectPerIngredient :", dataRecipes);
+    const selectPerIngredient = document.getElementById("select-per-ingredient");
+    let htmlContent = "<option value='empty' selected>Choisir un Ingredient</option>";
+    const uniqueIngredients = new Set();
+
+    dataRecipes.forEach(recipe => {
+        recipe.ingredients.forEach(ingredient => {
+            uniqueIngredients.add(ingredient.name);
+        });
+    });
+
+    uniqueIngredients.forEach(ingredient => {
+        htmlContent += `<option value="${ingredient}">${ingredient}</option>`;
+    });
+
+    selectPerIngredient.innerHTML = htmlContent;
+}
+
+/**
+ * Remplissage du select de create recipes avec conversion des uniter
+ */
+function fillSelectUnitCreateRecipes(dataRecipes) {
+    console.log("ligne 152 FillSelectPerIngredient :", dataRecipes);
+    const selectUnitCreateRecipes = document.getElementById('select-unit-create-recipes');
+    let htmlContent = "<option value='empty' selected>Choisir une unité</option>";
+    const uniqueUnits = new Set();
+  
+    dataRecipes.forEach(recipe => {
+      recipe.ingredients.forEach(ingredient => {
+        uniqueUnits.add(convertUnit(ingredient.unit));
+      });
+    });
+  
+    uniqueUnits.forEach(unit => {
+      htmlContent += `<option value="${unit}">${unit}</option>`;
+    });
+  
+    selectUnitCreateRecipes.innerHTML = htmlContent;
+  }
+  
+  /**
+   *conversion des uniter 
+   */
+  function convertUnit(unit) {
+    switch (unit) {
+      case "UNIT_GRAM":
+        return "gramme";
+      case "UNIT_KILOGRAM":
+        return "kilogrammes";
+      case "UNIT_OBJECT":
+        return "objet";
+      case "UNIT_PACK":
+        return "sachet";
+      case "UNIT_SLICE":
+        return "tranche";
+      case "UNIT_MILLILITERS":
+        return "millilitre";
+      case "UNIT_LITER":
+        return "litre";
+      case "UNIT_TABLESPOON":
+        return "cuillère à soupe";
+      case "UNIT_TEASPOON":
+        return "cuillère à café";
+      case "UNIT_CUBE":
+        return "cube";
+      case "UNIT_POD":
+        return "gousse";
+      case "UNIT_PINCH":
+        return "pincée";
+      case "UNIT_PM":
+        return "quantité selon le goût du cuisinier";
+      default:
+        return unit;
+    }
+  }
+  
+  
