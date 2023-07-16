@@ -98,11 +98,17 @@ module.exports.getNewJsonAddRecipe = (
  * @throws {Error} de type 404 si l'id est incorrect
  */
 module.exports.getNewJsonDeleteRecipe = (recipesJsonDb, id) => {
+  let isIdExists = false;
   for (let i = 0; i < recipesJsonDb.recipes.length; i++) {
     const gastronomyObj = recipesJsonDb.recipes[i];
     const recipes = gastronomyObj.recipes;
-    const index = recipes.findIndex((r) => r.id === id);
+    let isIdExists = false;
+    const index = recipes.findIndex((r) => {
+      console.log('r.id :', r.id)
+      return r.id === id});
+      console.log("index :", index);
     if (index !== -1) {
+      isIdExists = true;
       recipes.splice(index, 1);
       if (recipes.length === 0) {
         // Supprimer la gastronomie si elle ne contient plus de recipe
@@ -112,12 +118,17 @@ module.exports.getNewJsonDeleteRecipe = (recipesJsonDb, id) => {
       return recipesJsonDb;
     } 
     else {
-      const error = new Error("id not found");
-      error.name = "NotFoundError";
-      throw error;
+      isIdExists = isIdExists || false;
     }
   }
-  //return {};
+  if(!isIdExists) {
+    const error = new Error("id not found");
+    error.name = "NotFoundError";
+    throw error;
+  }
+  /**
+   * 
+   */
 };
 
 /** TODO : Modifier si l'id n'existe renvoyer une erreur 404 */

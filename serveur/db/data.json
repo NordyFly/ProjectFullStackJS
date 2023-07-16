@@ -17,8 +17,7 @@
               "quantity": 300,
               "unit": "UNIT_GRAM"
             }
-          ],
-          "gastronomy": "France"
+          ]
         },
         {
           "id": "a7f8c252-3704-4601-8cfa-a05c171eea72",
@@ -39,8 +38,7 @@
               "quantity": 1,
               "unit": "UNIT_OBJECT"
             }
-          ],
-          "gastronomy": "France"
+          ]
         },
         {
           "id": "4991076f-fda0-4413-a1d0-dc2f8310f26e",
@@ -61,8 +59,7 @@
               "quantity": 1,
               "unit": "UNIT_CUBE"
             }
-          ],
-          "gastronomy": "France"
+          ]
         },
         {
           "id": "ac89a1f3-0009-4ae6-8aa9-fc1612b9b544",
@@ -83,8 +80,7 @@
               "quantity": 1,
               "unit": "UNIT_PACK"
             }
-          ],
-          "gastronomy": "France"
+          ]
         }
       ]
     },
@@ -110,8 +106,7 @@
               "quantity": 1,
               "unit": "UNIT_CUBE"
             }
-          ],
-          "gastronomy": "Chine"
+          ]
         },
         {
           "id": "0e10bfcf-d32b-4f24-bed8-230c8c179929",
@@ -132,8 +127,7 @@
               "quantity": 1,
               "unit": "UNIT_PINCH"
             }
-          ],
-          "gastronomy": "Chine"
+          ]
         },
         {
           "id": "79a5b0f2-4a3d-4411-ba47-c099692aec97",
@@ -154,8 +148,7 @@
               "quantity": 1,
               "unit": "UNIT_PINCH"
             }
-          ],
-          "gastronomy": "Chine"
+          ]
         }
       ]
     },
@@ -181,8 +174,7 @@
               "quantity": 1,
               "unit": "UNIT_OBJECT"
             }
-          ],
-          "gastronomy": "Italie"
+          ]
         },
         {
           "id": "1f5b1824-8c81-4980-9fb7-71b6a5c4a6d1",
@@ -208,8 +200,7 @@
               "quantity": 1,
               "unit": "UNIT_POD"
             }
-          ],
-          "gastronomy": "Italie"
+          ]
         },
         {
           "title": "Tiramisu à l'italienne",
@@ -230,8 +221,7 @@
               "unit": "UNIT_PACK"
             }
           ],
-          "id": "0a833db6-581b-4deb-97cd-f3f9cf87d668",
-          "gastronomy": "Italie"
+          "id": "47049559-6c22-4e0c-b001-067ae120b5c2"
         }
       ]
     }
