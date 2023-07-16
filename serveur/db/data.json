@@ -201,27 +201,6 @@
               "unit": "UNIT_POD"
             }
           ]
-        },
-        {
-          "title": "Tiramisu à l'italienne",
-          "ingredients": [
-            {
-              "name": "sugar",
-              "quantity": 500,
-              "unit": "UNIT_GRAM"
-            },
-            {
-              "name": "egg",
-              "quantity": 5,
-              "unit": "UNIT_OBJECT"
-            },
-            {
-              "name": "vanilla sugar",
-              "quantity": 1,
-              "unit": "UNIT_PACK"
-            }
-          ],
-          "id": "47049559-6c22-4e0c-b001-067ae120b5c2"
         }
       ]
     }

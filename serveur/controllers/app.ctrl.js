@@ -7,15 +7,15 @@ const {
   getRecipesByGastronomyName,
   getNewJsonAddRecipe,
   getNewJsonDeleteRecipe,
-  getNewJsonUpdateRecipe
+  getNewJsonUpdateRecipe,
 } = require("../utils/jsonManipulator.js");
 
 /**
  * Fonction qui gère les requêtes get avec le paramètre 'gastronomy' ou 'ingredient'
  * ou sans paramètre.
  * Renvoie un tableau d'objets recipe ou une erreur 404.
- * @param {Request} req 
- * @param {Response} res 
+ * @param {Request} req
+ * @param {Response} res
  */
 exports.getRecipesCtrl = (req, res) => {
   const recipesAll = getAllRecipesFromJsonDb(jsonData);
@@ -29,11 +29,20 @@ exports.getRecipesCtrl = (req, res) => {
     } else {
       res.json(recipesAll);
     }
-  } catch (e) {
-    res.status(404).json({
-      code: "404",
-      title: "Ressources non trouvées."
-    });
+  } 
+  catch (e) {
+    if (e.name === "JsonProblem") {
+      res.status(500).json({
+        code: "500",
+        title: "Fichier data.json corrompu.",
+      });
+    } 
+    else  if (e.name === "NotFoundError") {
+      res.status(404).json({
+        code: "404",
+        title: "Ressource introuvable.",
+      });
+    }
   }
 };
 
@@ -58,8 +67,8 @@ exports.filterIngredients = (req, res) => {
  * Fonction qui gère les requêtes post de création de recipe avec le paramètre 'gastronomy'
  * dans l'url pour choisir à quelle gastronomy elle correspond.
  * Renvoie la recipe créée avec son id ou une erreur 400, 404 ou 500.
- * @param {Request} req 
- * @param {Response} res 
+ * @param {Request} req
+ * @param {Response} res
  */
 exports.createRecipeCtrl = (req, res) => {
   const gastronomy = req.query.gastronomy;
@@ -75,30 +84,36 @@ exports.createRecipeCtrl = (req, res) => {
       if (e.name === "ValidationError") {
         res.status(400).json({
           code: "400",
-          title: "Corps de requête incorrect."
+          title: "Corps de requête incorrect.",
         });
-      } else {
+      } 
+      else if (e.name === "JsonProblem") {
+        res.status(400).json({
+          code: "500",
+          title: "Fichier data.json corrompu."
+        });
+      } 
+      else {
         res.status(500).json({
           code: "500",
-          title: "Erreur serveur."
+          title: "Erreur serveur.",
         });
       }
     }
   } else {
     res.status(404).json({
       code: "404",
-      title: "Url incorrecte."
+      title: "Url incorrecte.",
     });
   }
 };
 
-
 /**
- * Fonction qui gère les requêtes patch de modification de recipe avec l'id en paramètre 
+ * Fonction qui gère les requêtes patch de modification de recipe avec l'id en paramètre
  * dans l'url.
  * Renvoie la recipe modifiée avec son id ou une erreur 400, 404 ou 500.
- * @param {Request} req 
- * @param {Response} res 
+ * @param {Request} req
+ * @param {Response} res
  */
 exports.updateRecipesCtrl = (req, res) => {
   const id = req.params.id;
@@ -113,28 +128,36 @@ exports.updateRecipesCtrl = (req, res) => {
     if (e.name === "ValidationError") {
       res.status(400).json({
         code: "400",
-        title: "Corps de requête incorrect."
+        title: "Corps de requête incorrect.",
       });
-    } else if (e.name === "NotFoundError") {
+    } 
+    else if (e.name === "NotFoundError") {
       res.status(404).json({
         code: "404",
-        title: "Ressource introuvable."
+        title: "Ressource introuvable.",
       });
-    } else {
+    }
+    else if (e.name === "JsonProblem") {
       res.status(500).json({
         code: "500",
-        title: "Erreur serveur."
+        title: "Fichier data.json corrompu.",
+      });
+    } 
+    else {
+      res.status(500).json({
+        code: "500",
+        title: "Erreur serveur.",
       });
     }
   }
 };
 
 /**
- * Fonction qui gère les requêtes delete de suppression de recipe avec l'id en paramètre 
+ * Fonction qui gère les requêtes delete de suppression de recipe avec l'id en paramètre
  * dans l'url.
  * Renvoie un json avec l'id de la recipe supprimée en cas de succès ou une erreur 404 ou 500.
- * @param {Request} req 
- * @param {Response} res 
+ * @param {Request} req
+ * @param {Response} res
  */
 exports.deleteRecipesCtrl = (req, res) => {
   const id = req.params.id;
@@ -151,17 +174,23 @@ exports.deleteRecipesCtrl = (req, res) => {
     if (e.name === "NotFoundError") {
       res.status(404).json({
         code: "404",
-        title: "Ressource introuvable."
+        title: "Ressource introuvable.",
       });
-    } else {
+    } 
+    else if (e.name === "JsonProblem") {
       res.status(500).json({
         code: "500",
-        title: "Erreur serveur."
+        title: "Fichier data.json corrompu.",
+      });
+    }  
+    else {
+      res.status(500).json({
+        code: "500",
+        title: "Erreur serveur.",
       });
     }
   }
 };
-
 
 /**
  * Attention :A ne pas utiliser sans précaution :
