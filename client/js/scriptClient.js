@@ -194,7 +194,7 @@ async function getRecipesByGastronomyName(selectedCountry) {
 selectShowRecipes.addEventListener('change', (event) => {
     event.preventDefault();
     let selectedId = event.target.value;
-    console.log(`ligne 197 selectedCountry`,selectedCountry);
+    console.log(`ligne 197 selectedCountry`,selectedId);
     let filteredRecipes = arrayDataRecipes.filter(recipe => recipe.id === selectedId);
     //getRecipesByName(selectedId);
     createRecipesCard(filteredRecipes);
@@ -233,16 +233,81 @@ function createRecipesCard(dataRecipes) {
       });
       htmlContent += `<div class="card mx-2 my-2" style="width: 18rem;">
         <div class="card-body">
-          <h4 class="card-title">Pays : ${recipe.gastronomy}</h4>
+          <h4 class="card-title" >Pays : ${recipe.gastronomy}</h4>
           <h5 class="card-title">${recipe.title}</h5>
           <ul class="list-group">${ingredientsHtml}</ul>
-          <a href="#" class="btn btn-primary">Ajouter a ma liste</a>
+          <button id="${recipe.id}" class="btn btn-success edit-recipes">Editer</button>
+          <button id="${recipe.id}" class="btn btn-danger suppr">Supprimer</button>
         </div>
       </div>`;
     });
     sctnRecipes.innerHTML = htmlContent;
   }
+
+
+/**
+ * 
+ * Fonction a appeler avec un listener dans le code de creation des card 
+ */
+  // Fonction pour éditer une "card" de recette
+  function editRecipeCard(cardId) {
+    // Récupérer l'élément de la "card" de recette à éditer
+    let recipeCard = document.getElementById(cardId);
   
+    // Récupérer les éléments des ingrédients et des quantités
+    let ingredientsElement = recipeCard.querySelector(".recipe-ingredients");
+    let quantitiesElement = recipeCard.querySelector(".recipe-quantities");
+  
+    // Créer des champs de texte pour les ingrédients et les quantités
+    let ingredientsInput = document.createElement("textarea");
+    ingredientsInput.value = ingredientsElement.textContent;
+    recipeCard.replaceChild(ingredientsInput, ingredientsElement);
+  
+    let quantitiesInput = document.createElement("textarea");
+    quantitiesInput.value = quantitiesElement.textContent;
+    recipeCard.replaceChild(quantitiesInput, quantitiesElement);
+  
+    // Créer un bouton de soumission pour sauvegarder les modifications
+    let saveButton = document.createElement("button");
+    saveButton.textContent = "Enregistrer";
+    saveButton.addEventListener("click", function() {
+      // Mettre à jour les éléments des ingrédients et des quantités avec les valeurs des champs de texte
+      ingredientsElement.textContent = ingredientsInput.value;
+      quantitiesElement.textContent = quantitiesInput.value;
+  
+      // Supprimer les champs de texte et réafficher les éléments de la "card" de recette
+      recipeCard.replaceChild(ingredientsElement, ingredientsInput);
+      recipeCard.replaceChild(quantitiesElement, quantitiesInput);
+    });
+  
+    // Ajouter le bouton de sauvegarde à la "card" de recette
+    recipeCard.appendChild(saveButton);
+  }
+  
+  const btnEditCard = document.getElementsByClassName('edit-recipes');
+  console.log(btnEditCard);
+  
+  Array.from(btnEditCard).forEach(b => b.addEventListener('click', (event) => {
+    const card = event.target.closest('.recipe-card');
+    if (card) {
+      editRecipeCard(card.id);
+    }
+  }));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
