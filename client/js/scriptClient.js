@@ -1,7 +1,9 @@
 import { createMarkup } from "../utils/dom.js";
 
 //const url = "/recipes"
-const endPoint = "https://localhost:4443/client"
+const endPoint = "https://localhost:4443"
+let arrayDataRecipes = [];
+
 /** 
  * Construction des container 
 */
@@ -19,7 +21,7 @@ const Title = createMarkup('h1', 'Master Cook', sctnTitle, [{ class: "text-cente
  */
 const divContentsctnSelectShowRecipes = createMarkup('div', '', sctnSelect, [{ class: "d-flex justify-content-center flex-column" }]);
 const labelShowRecipes = createMarkup('label', 'Choisir une recette', divContentsctnSelectShowRecipes, [{ class: "form-control" }]);
-const selectShowRecipes = createMarkup('select', 'Choisir une recette', divContentsctnSelectShowRecipes, [{ class: "form-select" }]);
+const selectShowRecipes = createMarkup('select', 'Choisir une recette', divContentsctnSelectShowRecipes, [{ class: "form-select", id:"select-all-recipes" }]);
 /**
  * creation select show per country
  */
@@ -67,7 +69,8 @@ function addInputIngredient() {
     const divCreateRecipesModalInput = createMarkup('div', '', divCreateRecipesModal, [{ class: "d-flex flex-row" }])
     createMarkup('input', '', divCreateRecipesModalInput, [{ class: "form-control my-1 mx-1", placeholder: "ingredient" }]);
     createMarkup('input', '', divCreateRecipesModalInput, [{ class: " my-1 mx-1",type:'number'}]);
-    createMarkup('select', 'Choisir une uniter', divCreateRecipesModalInput, [{ class: "form-select my-1 mx-1" }]);
+    const selectCreateRecipes  =  createMarkup('select', 'Choisir une uniter', divCreateRecipesModalInput, [{ class: "caca form-select my-1 mx-1 "}]);
+    fillSelectUnitCreateRecipesNew(arrayDataRecipes);
 }
  
 
@@ -92,12 +95,14 @@ async function getAllRecipes() {
                 'Access-Control-Allow-Origin': '*'
             }
         });
-
+        
         const dataRecipes = await response.json();
+        arrayDataRecipes = dataRecipes;
         createRecipesCard(dataRecipes);
         fillSelectPerCountry(dataRecipes);
         fillSelectPerIngredient(dataRecipes);
         fillSelectUnitCreateRecipes(dataRecipes);
+        fillSelectAllRecipes(dataRecipes);
         console.log("ligne 97", dataRecipes);
 
     }
@@ -105,6 +110,23 @@ async function getAllRecipes() {
         console.log(`erreur`, error);
     }
 }
+
+
+/**
+ * Remplissage du select par pays 
+ */
+function fillSelectAllRecipes(dataRecipes) {
+    console.log("ligne 115 FillSelectPerCountry:", dataRecipes);
+    const selectShowRecipes = document.getElementById("select-all-recipes");
+    let htmlContent = "<option value='empty' selected>Choisir une recette</option>";
+    dataRecipes.forEach(u => {
+            htmlContent += `<option value="${u.id}">${u.title}</option>`;
+           //console.log(`ligne 121 `,htmlContent);
+        })
+        selectShowRecipes.innerHTML = htmlContent;
+}
+
+
 
 /**
  * Création des cards avec les recettes avec conversion des uniter
@@ -123,7 +145,7 @@ function createRecipesCard(dataRecipes) {
           <h4 class="card-title">Pays : ${recipe.gastronomy}</h4>
           <h5 class="card-title">${recipe.title}</h5>
           <ul class="list-group">${ingredientsHtml}</ul>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+          <a href="#" class="btn btn-primary">Ajouter a ma liste</a>
         </div>
       </div>`;
     });
@@ -179,6 +201,7 @@ function fillSelectPerIngredient(dataRecipes) {
 function fillSelectUnitCreateRecipes(dataRecipes) {
     console.log("ligne 152 FillSelectPerIngredient :", dataRecipes);
     const selectUnitCreateRecipes = document.getElementById('select-unit-create-recipes');
+    const selectCreateRecipes = document.getElementsByClassName('unit');
     let htmlContent = "<option value='empty' selected>Choisir une unité</option>";
     const uniqueUnits = new Set();
   
@@ -193,8 +216,35 @@ function fillSelectUnitCreateRecipes(dataRecipes) {
     });
   
     selectUnitCreateRecipes.innerHTML = htmlContent;
+    selectCreateRecipes.innerHTML = htmlContent;
   }
   
+
+  /**
+ * Remplissage du select de create recipes avec conversion des uniter
+ */
+function fillSelectUnitCreateRecipesNew(arrayDataRecipes) {
+    console.log("ligne 227 fillSelectUnitCreateRecipesNew:", arrayDataRecipes);
+    const selectCreateRecipes = document.getElementById('select-unit-create-recipes');
+    let htmlContent = "<option value='empty' selected>Choisir une unité</option>";
+    const uniqueUnits = new Set();
+  
+    arrayDataRecipes.forEach(recipe => {
+      recipe.ingredients.forEach(ingredient => {
+        uniqueUnits.add(convertUnit(ingredient.unit));
+        console.log(`tableau`, recipe.ingredients );
+      });
+    });
+  
+    uniqueUnits.forEach(unit => {
+      htmlContent += `<option value="${unit}">${unit}</option>`;
+      console.log(`htmlContent`,htmlContent);
+    });
+    selectCreateRecipes.innerHTML = htmlContent;
+    console.log( `ligne 244 selectCreateRecipes`,selectCreateRecipes);
+  }
+  
+
   /**
    *conversion des uniter 
    */
