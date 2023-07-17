@@ -1,0 +1,344 @@
+Documentation du serveur :
+
+le serveur reçoit en renvoie du json exclusivement
+
+le serveur gère 6 requêtes :
+
+[endpoint : protocole + url du serveur + port du serveur]
+
+
+
+1) '(endpoint)/recipes' en GET
+******************************
+
+
+	- renvoie la liste des recettes dans un tableau (en ajoutant la propriété 'gastronomy' à chaque recette 
+	pour simplifier la vie au front)
+	
+	ex de réponse : 
+
+[
+    {
+        "id": "97e9dad8-fe5a-454d-9797-ed85fecfcb09",
+        "title": "Raclette",
+        "ingredients": [
+            {
+                "name": "pomme de terre",
+                "quantity": 16,
+                "unit": "UNIT_OBJECT"
+            },
+            {
+                "name": "fromage à raclette",
+                "quantity": 300,
+                "unit": "UNIT_GRAM"
+            }
+        ],
+        "gastronomy": "France"
+    },
+    {
+        "id": "0e10bfcf-d32b-4f24-bed8-230c8c179929",
+        "title": "Brioche Chinois",
+        "ingredients": [
+            {
+                "name": "farine",
+                "quantity": 4,
+                "unit": "UNIT_TABLESPOON"
+            },
+            {
+                "name": "sucre",
+                "quantity": 4,
+                "unit": "UNIT_TEASPOON"
+            },
+            {
+                "name": "sel",
+                "quantity": 1,
+                "unit": "UNIT_PINCH"
+            }
+        ],
+        "gastronomy": "Chine"
+    },
+    {
+        "title": "Tiramisu à l'italienne",
+        "ingredients": [
+            {
+                "name": "sugar",
+                "quantity": 500,
+                "unit": "UNIT_GRAM"
+            },
+            {
+                "name": "egg",
+                "quantity": 5,
+                "unit": "UNIT_OBJECT"
+            },
+            {
+                "name": "vanilla sugar",
+                "quantity": 1,
+                "unit": "UNIT_PACK"
+            }
+        ],
+        "id": "241f53bd-7ebf-43b7-bb97-bc33aafe7977",
+        "gastronomy": "Italie"
+    }
+]
+
+
+
+2) '(endpoint)/recipes?gastronomy=xxxx' en GET
+**********************************************
+
+	- renvoie la liste des recettes (de la gastronomy xxxx passée en paramètre dans l'url) dans un tableau 
+	(en ajoutant la propriété 'gastronomy' à chaque recette pour simplifier la vie au front)
+	
+	ex de réponse pour gastronomy=Chine : 
+
+
+[
+    {
+        "id": "ac69eaf6-822e-4d5f-a453-6de5fe225331",
+        "title": "Nouilles",
+        "ingredients": [
+            {
+                "name": "viande de veau",
+                "quantity": 1,
+                "unit": "UNIT_KILOGRAM"
+            },
+            {
+                "name": "carotte",
+                "quantity": 12,
+                "unit": "UNIT_OBJECT"
+            },
+            {
+                "name": "bouillon cube",
+                "quantity": 1,
+                "unit": "UNIT_CUBE"
+            }
+        ],
+        "gastronomy": "Chine"
+    },
+    {
+        "id": "0e10bfcf-d32b-4f24-bed8-230c8c179929",
+        "title": "Brioche Chinois",
+        "ingredients": [
+            {
+                "name": "farine",
+                "quantity": 4,
+                "unit": "UNIT_TABLESPOON"
+            },
+            {
+                "name": "sucre",
+                "quantity": 4,
+                "unit": "UNIT_TEASPOON"
+            },
+            {
+                "name": "sel",
+                "quantity": 1,
+                "unit": "UNIT_PINCH"
+            }
+        ],
+        "gastronomy": "Chine"
+    }
+]
+
+
+
+3) '(endpoint)/recipes?ingredient=xxxx' en GET
+**********************************************
+
+	- renvoie la liste des recettes (de l'ingredient xxxx passé en paramètre dans l'url) dans un tableau 
+	(en ajoutant la propriété 'gastronomy' à chaque recette pour simplifier la vie au front)
+	
+	ex de réponse pour ingredient=egg : 
+
+[
+    {
+        "title": "Tiramisu à l'italienne",
+        "ingredients": [
+            {
+                "name": "sugar",
+                "quantity": 500,
+                "unit": "UNIT_GRAM"
+            },
+            {
+                "name": "egg",
+                "quantity": 5,
+                "unit": "UNIT_OBJECT"
+            },
+            {
+                "name": "vanilla sugar",
+                "quantity": 1,
+                "unit": "UNIT_PACK"
+            }
+        ],
+        "id": "241f53bd-7ebf-43b7-bb97-bc33aafe7977",
+        "gastronomy": "Italie"
+    }
+]
+
+
+
+4) '(endpoint)/recipes?gastronomy=xxxx' en POST
+************************************************
+
+	Note :J'ai ajouté le choix de la gastronomie (en parametre de l'url) dans laquelle ecrire la recette 
+	dans le data.json, vu que c'est pas précisé dans les consignes mais que c'est indispensable pour 
+	respecter la structure du data.json.
+	
+	- ajoute la recette passée dans le body de la requête
+	
+	- le body de la requête doit contenir l'objet à ajouter (pas d'id a fournir) :
+	
+	ex de body :
+
+{
+    "title": "Tiramisu",
+    "ingredients": [
+        {
+            "name": "sugar",
+            "quantity": 100,
+            "unit": "UNIT_GRAM"
+        },
+        {
+            "name": "vanilla sugar",
+            "quantity": 1,
+            "unit": "UNIT_PACK"
+        }
+    ]
+}
+
+	- renvoie l'objet ajouté avec son id (en ajoutant la propriété 'gastronomy' à chaque recette pour 
+	simplifier la vie au front)
+	
+	ex de réponse  :
+	
+{
+    "title": "Tiramisu",
+    "ingredients": [
+        {
+            "name": "sugar",
+            "quantity": 100,
+            "unit": "UNIT_GRAM"
+        },
+        {
+            "name": "vanilla sugar",
+            "quantity": 1,
+            "unit": "UNIT_PACK"
+        }
+    ],
+    "id": "6d392b0a-719c-4b61-9d0c-d70be31fc72f",
+    "gastronomy": "Italie"
+}
+
+
+
+5) '(endpoint)/recipes/xxxx en PATCH'
+*************************************
+	
+	- modifie la recette dont l'id est passé en paramètre (xxxx)
+	
+	- le body de la requête doit contenir les nouvelles valeurs de l'objet à modifier (fournir d'id) :
+	
+	ex de body :
+	
+{
+    "title": "Tiramisu à l'italienne",
+    "ingredients": [
+        {
+            "name": "sugar",
+            "quantity": 500,
+            "unit": "UNIT_GRAM"
+        },
+        {
+            "name": "egg",
+            "quantity": 5,
+            "unit": "UNIT_OBJECT"
+        },
+        {
+            "name": "vanilla sugar",
+            "quantity": 1,
+            "unit": "UNIT_PACK"
+        }
+    ],
+    "id": "241f53bd-7ebf-43b7-bb97-bc33aafe7977"
+}
+
+
+	- renvoie l'objet modifié avec son id (en ajoutant la propriété 'gastronomy' à chaque recette pour 
+	simplifier la vie au front)
+	
+	ex de réponse  :
+	
+{
+    "title": "Tiramisu à l'italienne",
+    "ingredients": [
+        {
+            "name": "sugar",
+            "quantity": 500,
+            "unit": "UNIT_GRAM"
+        },
+        {
+            "name": "egg",
+            "quantity": 5,
+            "unit": "UNIT_OBJECT"
+        },
+        {
+            "name": "vanilla sugar",
+            "quantity": 1,
+            "unit": "UNIT_PACK"
+        }
+    ],
+    "id": "241f53bd-7ebf-43b7-bb97-bc33aafe7977",
+    "gastronomy": "Italie"
+}
+
+
+
+6) '(endpoint)/recipes/xxxx' en DELETE
+**************************************
+
+	- supprime la recette dont l'id est passé en paramètre (xxxx)
+	
+	- renvoie un json en cas de succès (avec l'id de la recette supprimée) 
+	
+	ex de réponse  :
+
+{
+    "code": "200",
+    "title": "Ressource recette supprimée.",
+    "id": "241f53bd-7ebf-43b7-bb97-bc33aafe7977"
+}
+
+
+
+7) gestion des erreurs
+**********************
+
+Selon les cas, des erreurs 400, 404 ou 500 sont renvoyées avec le json correspondant :
+
+ex. réponse erreur 400 :
+
+{
+          code: "400",
+          title: "Corps de requête incorrect."
+}
+
+ex. réponse erreur 404 :
+
+{
+        code: "404",
+        title: "Ressource introuvable."
+}
+
+ex. réponse erreur 500 :
+
+{
+        code: "500",
+        title: "Erreur serveur."
+}
+
+ex. réponse erreur 500 :
+
+{
+        code: "500",
+        title: "Fichier data.json corrompu.",
+}
+
