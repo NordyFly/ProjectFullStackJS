@@ -1,27 +1,19 @@
 const router = require('express').Router();
 const {
-  homeCtrl,
-  allRecipes,
-  filterGastronomy,
-  filterIngredients,
-  createRecipes,
-  updateRecipes,
-  deleteRecipes,
+  getRecipesCtrl,
+  createRecipeCtrl,
+  updateRecipesCtrl,
+  deleteRecipesCtrl,
 } = require('../controllers/app.ctrl');
 
-
-
-// Récupérer toutes les recettes
-router.get('/recipes', allRecipes);
-// Filtrer les recettes par gastronomie et ingrédients
-router.get('/recipes/gastronomy', filterGastronomy);
-router.get('/recipes/ingredients', filterIngredients);
+// Récupérer toutes les recettes / Attention : les parametre apres '?' sont pris en compte dans cette route
+router.get('/recipes', getRecipesCtrl);
 // Créer une nouvelle recette
-router.post('/recipes', createRecipes);
-// Modifier une recette existante
-router.put('/recipes/:id', updateRecipes);
-// Supprimer une recette
-router.delete('/recipes/:id', deleteRecipes);
-
+router.post('/recipes', createRecipeCtrl);
+// Modifier une recette existante selon son id
+router.patch('/recipes/:id', updateRecipesCtrl);
+// Supprimer une recette selon son id
+router.delete('/recipes/:id', deleteRecipesCtrl);
+// Renvoyer vers la page par défaut pour tous les autres cas
 router.get('*', (req, res) => res.redirect('/recipes'));
 module.exports = router;
