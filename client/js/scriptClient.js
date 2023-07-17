@@ -69,7 +69,7 @@ function addInputIngredient() {
     const divCreateRecipesModalInput = createMarkup('div', '', divCreateRecipesModal, [{ class: "d-flex flex-row" }])
     createMarkup('input', '', divCreateRecipesModalInput, [{ class: "form-control my-1 mx-1", placeholder: "ingredient" }]);
     createMarkup('input', '', divCreateRecipesModalInput, [{ class: " my-1 mx-1",type:'number'}]);
-    const selectCreateRecipes  =  createMarkup('select', 'Choisir une uniter', divCreateRecipesModalInput, [{ class: "caca form-select my-1 mx-1 "}]);
+    const selectCreateRecipes  =  createMarkup('select', 'Choisir une uniter', divCreateRecipesModalInput, [{ class: "unit form-select my-1 mx-1 "}]);
     fillSelectUnitCreateRecipesNew(arrayDataRecipes);
 }
  
@@ -220,29 +220,30 @@ function fillSelectUnitCreateRecipes(dataRecipes) {
   }
   
 
-  /**
- * Remplissage du select de create recipes avec conversion des uniter
- */
-function fillSelectUnitCreateRecipesNew(arrayDataRecipes) {
+  
+  function fillSelectUnitCreateRecipesNew(arrayDataRecipes) {
     console.log("ligne 227 fillSelectUnitCreateRecipesNew:", arrayDataRecipes);
-    const selectCreateRecipes = document.getElementById('select-unit-create-recipes');
+    const selectCreateRecipesList = document.querySelectorAll('.unit');
     let htmlContent = "<option value='empty' selected>Choisir une unité</option>";
     const uniqueUnits = new Set();
   
     arrayDataRecipes.forEach(recipe => {
       recipe.ingredients.forEach(ingredient => {
         uniqueUnits.add(convertUnit(ingredient.unit));
-        console.log(`tableau`, recipe.ingredients );
+        console.log(`tableau`, recipe.ingredients);
       });
     });
   
     uniqueUnits.forEach(unit => {
       htmlContent += `<option value="${unit}">${unit}</option>`;
-      console.log(`htmlContent`,htmlContent);
+      console.log(`htmlContent`, htmlContent);
     });
-    selectCreateRecipes.innerHTML = htmlContent;
-    console.log( `ligne 244 selectCreateRecipes`,selectCreateRecipes);
+  
+    selectCreateRecipesList.forEach(select => {
+      select.innerHTML = htmlContent;
+    });
   }
+  
   
 
   /**
