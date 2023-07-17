@@ -300,9 +300,14 @@ function showEditModal(recipe) {
     // Récupérer l'élément de la "card" de recette à éditer
     let recipeCard = document.getElementById(cardId);
   
-    // Récupérer les éléments des ingrédients et des quantités
-    let ingredientsElement = recipeCard.querySelector(".recipe-ingredients");
-    let quantitiesElement = recipeCard.querySelector(".recipe-quantities");
+    const modalTitle = modal.querySelector('.modal-title');
+    modalTitle.textContent = "Modification de recette";
+
+    // Récupérer les éléments de la modal
+    const recipeNameInput = modal.querySelector('.modal-body input[placeholder="Nom de votre recette"]');
+    const gastronomyInput = modal.querySelector('.modal-body input[placeholder="Gastronomie"]');
+    const ingredientInputs = modal.querySelectorAll('.modal-body input[placeholder="ingredient"]');
+    const unitSelects = modal.querySelectorAll('.modal-body select');
   
     const modalTitle = modal.querySelector('.modal-title');
     modalTitle.textContent = "Modification de recette";
@@ -342,8 +347,6 @@ function showEditModal(recipe) {
     bootstrapModal.show();
   }
   
-  const btnEditCard = document.getElementsByClassName('edit-recipes');
-  console.log(btnEditCard);
   
   Array.from(btnEditCard).forEach(b => b.addEventListener('click', (event) => {
     const card = event.target.closest('.recipe-card');
