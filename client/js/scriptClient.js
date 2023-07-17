@@ -221,7 +221,7 @@ function fillSelectAllRecipes(dataRecipes) {
 
 /**
  * Création des cards avec les recettes avec conversion des uniter
- */
+ 
 function createRecipesCard(dataRecipes) {
     const sctnRecipes = document.getElementById('section-card-recipes');
     let htmlContent = "";
@@ -243,12 +243,12 @@ function createRecipesCard(dataRecipes) {
     });
     sctnRecipes.innerHTML = htmlContent;
   }
-
+*/
 
 /**
  * 
  * Fonction a appeler avec un listener dans le code de creation des card 
- */
+ 
   // Fonction pour éditer une "card" de recette
   function editRecipeCard(cardId) {
     // Récupérer l'élément de la "card" de recette à éditer
@@ -293,11 +293,69 @@ function createRecipesCard(dataRecipes) {
       editRecipeCard(card.id);
     }
   }));
+*/
 
+// Essaye ce code by Noureddine
+function createRecipesCard(dataRecipes) {
+  const sctnRecipes = document.getElementById('section-card-recipes');
+  let htmlContent = "";
+  dataRecipes.forEach((recipe, index) => { // Parcours de chaque recette dans les données
+    let ingredientsHtml = "";
+    recipe.ingredients.forEach(ingredient => { // Parcours de chaque ingrédient dans la recette
+      const convertedUnit = convertUnit(ingredient.unit); // Conversion de l'unité de mesure
+      // Création des éléments HTML pour chaque ingrédient, y compris un champ de texte caché pour l'édition
+      ingredientsHtml += `
+        <li class="list-group-item my-2 rounded border border-black">
+          <span class="ingredient-name">${ingredient.name}</span> : 
+          <span class="ingredient-quantity">${ingredient.quantity}</span>
+          <span class="ingredient-unit">${convertedUnit}</span>
+          <input type="text" class="ingredient-input" value="${ingredient.quantity}" style="display: none;">
+        </li>`;
+    });
+    // Création de la carte de recette avec l'index comme identifiant unique
+    htmlContent += `<div class="card mx-2 my-2" id="card${index}" style="width: 18rem;">
+      <div class="card-body">
+        <h4 class="card-title" >Pays : ${recipe.gastronomy}</h4>
+        <h5 class="card-title">${recipe.title}</h5>
+        <ul class="list-group recipe-ingredients">${ingredientsHtml}</ul>
+        <button id="edit-${index}" class="btn btn-success edit-recipes">Editer</button>
+        <button id="delete-${index}" class="btn btn-danger suppr">Supprimer</button>
+      </div>
+    </div>`;
+  });
+  sctnRecipes.innerHTML = htmlContent; // Ajout du contenu HTML des cartes de recette dans la section 'section-card-recipes'
 
+  const btnEditCards = document.getElementsByClassName('edit-recipes'); // Sélection de tous les boutons d'édition
 
+  for (let i = 0; i < btnEditCards.length; i++) { // Parcours de chaque bouton d'édition
+    btnEditCards[i].addEventListener('click', (event) => { // Ajout d'un écouteur d'événement au clic sur le bouton d'édition
+      const card = event.target.closest('.card'); // Récupération de la carte parente du bouton
+      if (card) {
+        toggleEditInputs(card); // Appel de la fonction pour basculer entre l'affichage et l'édition des ingrédients
+      }
+    });
+  }
+}
 
+function toggleEditInputs(card) {
+  const ingredientElements = card.querySelectorAll(".list-group-item"); // Sélection de tous les éléments d'ingrédients
+  ingredientElements.forEach(ingredientElement => { // Parcours de chaque élément d'ingrédient
+    const quantityElement = ingredientElement.querySelector(".ingredient-quantity"); // Sélection de l'élément de quantité
+    const inputElement = ingredientElement.querySelector(".ingredient-input"); // Sélection de l'élément de champ de texte
+    const editButton = card.querySelector(".edit-recipes"); // Sélection du bouton d'édition
 
+    if (inputElement.style.display === "none") { // Si le champ de texte est caché, on le rend visible pour l'édition
+      inputElement.style.display = "inline-block";
+      quantityElement.style.display = "none";
+      editButton.textContent = "Enregistrer"; // Changement du texte du bouton pour indiquer que l'édition est en cours
+    } else { // Si le champ de texte est visible, on le cache et enregistre la nouvelle valeur
+      inputElement.style.display = "none";
+      quantityElement.style.display = "inline-block";
+      editButton.textContent = "Editer"; // Changement du texte du bouton pour indiquer que l'on peut éditer
+      quantityElement.textContent = inputElement.value; // Enregistrement de la nouvelle valeur dans l'élément span de quantité
+    }
+  });
+}
 
 
 
