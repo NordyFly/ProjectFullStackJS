@@ -26,8 +26,6 @@
 
 - ou, lancer 'index.html' avec un serveur web
 
-- sur le navigateur aller sur : https://localhost:4443 (ou http://localhost:8080)
-
 ## Développeurs
 
 - [@jacquesgrana](https://github.com/jacquesgrana)
