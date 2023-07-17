@@ -111,6 +111,97 @@ async function getAllRecipes() {
     }
 }
 
+ //const selectRecipes = document.getElementById('select-all-recipes');
+//selectPerCountry = document.getElementById('select-per-country');
+
+/**
+ * Listener pour la recuperation des recette par ingredient
+ */
+ const selectPerIngredient = document.getElementById('select-per-ingredient');
+
+ selectPerIngredient.addEventListener('change', (event) => {
+   console.log(`119`);
+    let selectedIngredient = event.target.value;
+    let filteredRecipes = arrayDataRecipes.filter(arrayDataRecipes => arrayDataRecipes.ingredients.includes(selectedIngredient));
+    getRecipesByIngredientName(selectedIngredient);
+    createRecipesCard(filteredRecipes); // Appeler la fonction avec le tableau filtré
+    if (selectedIngredient == 'empty') {
+        getAllRecipes();
+    }
+});
+/**
+ * Fonction permetant une requete pour la recuperation des recette par ingredient
+ */
+async function getRecipesByIngredientName(selectedIngredient) {
+    try {
+        const response = await fetch(`${endPoint}/recipes/?ingredient=${selectedIngredient}`, {
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
+        
+        const dataRecipes = await response.json();
+        arrayDataRecipes = dataRecipes;
+        createRecipesCard(arrayDataRecipes);
+        console.log("ligne 97",  arrayDataRecipes);
+
+    }
+    catch (error) {
+        console.log(`erreur`, error);
+    }
+}
+/**
+ * Listener pour la recuperation des recette par Gastronomy
+ */
+selectPerCountry.addEventListener('change', (event) => {
+    let selectedCountry = event.target.value;
+    console.log(`ligne 160 selectedCountry`,selectedCountry);
+    let filteredRecipes = arrayDataRecipes.filter(recipe => recipe.gastronomy === selectedCountry);
+    getRecipesByGastronomyName(selectedCountry);
+    createRecipesCard(filteredRecipes);
+    if (selectedCountry == 'empty') {
+        getAllRecipes();
+    }
+});
+
+/**
+ *  Fonction permetant une requete pour la recuperation des recette par Gastro (tourista)
+ */
+async function getRecipesByGastronomyName(selectedCountry) {
+    try {
+        console.log(`171`,selectedCountry);
+        const response = await fetch(`${endPoint}/recipes/?gastronomy=${selectedCountry}`, {
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
+        
+        const dataRecipes = await response.json();
+        arrayDataRecipes = dataRecipes;
+        createRecipesCard(arrayDataRecipes);
+        console.log("ligne 183",  arrayDataRecipes);
+
+    }
+    catch (error) {
+        console.log(`erreur`, error);
+    }
+}
+
+selectShowRecipes.addEventListener('change', (event) => {
+    event.preventDefault();
+    let selectedId = event.target.value;
+    console.log(`ligne 197 selectedCountry`,selectedCountry);
+    let filteredRecipes = arrayDataRecipes.filter(recipe => recipe.id === selectedId);
+    //getRecipesByName(selectedId);
+    createRecipesCard(filteredRecipes);
+    if (selectedId == 'empty') {
+        getAllRecipes();
+    }
+});
 
 /**
  * Remplissage du select par pays 
@@ -120,7 +211,7 @@ function fillSelectAllRecipes(dataRecipes) {
     const selectShowRecipes = document.getElementById("select-all-recipes");
     let htmlContent = "<option value='empty' selected>Choisir une recette</option>";
     dataRecipes.forEach(u => {
-            htmlContent += `<option value="${u.id}">${u.title}</option>`;
+            htmlContent += `<option value="${u.id}">${u.title} : ${u.gastronomy}</option>`;
            //console.log(`ligne 121 `,htmlContent);
         })
         selectShowRecipes.innerHTML = htmlContent;
@@ -165,7 +256,7 @@ function fillSelectPerCountry(dataRecipes) {
     let gastronomies = []; // Tableau pour stocker les gastronomies déjà ajoutées
     dataRecipes.forEach(u => {
         if (!gastronomies.includes(u.gastronomy)) {
-            htmlContent += `<option value="${u.id}">${u.gastronomy}</option>`;
+            htmlContent += `<option value="${u.gastronomy}">${u.gastronomy}</option>`;
             gastronomies.push(u.gastronomy);
         }
     });
