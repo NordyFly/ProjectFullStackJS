@@ -192,18 +192,9 @@ exports.deleteRecipesCtrl = (req, res) => {
   }
 };
 
-/**
- * Attention :A ne pas utiliser sans précaution :
- * elle peut casser le data.json !!!!!!!!!!!!!!!!!!!!!!!!!
- */
-
-/**
- * Fonction qui met à jour le fichier data.json avec son nouveau contenu passé en paramètre.
- * @param {json} newJsonData : nouveau contenu en json.
- */
-function updateJSON(newJsonData) {
-  writeFileSync(
-    resolve("db", "data.json"),
-    JSON.stringify(newJsonData, null, 2)
-  );
-}
+  function updateJSON(){
+    writeFileSync(
+      resolve('db','data.json'),
+      JSON.stringify({recipes}, null, 2)
+    );
+  }
