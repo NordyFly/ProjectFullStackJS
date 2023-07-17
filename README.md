@@ -1,41 +1,40 @@
-Projet JSFullStack - CDAPHP Diginamic - Juillet 2023
+## SERVEUR :
 
-<br><br><br>
+### pour installer le serveur :
+- ouvrir le dossier 'serveur' dans vscode
 
-> SERVEUR NodeJs avec Express :
+- copier/coller les fichiers de 'env' (et corriger l'extension des copies)
 
-<br>
+- renseignez les ports (dev : 8080/4443 - prod : 80/443) dans ces fichiers
 
-* pour installer le serveur :
+- installer le certificat et la key ssl (default.crt et default.key) dans le dossier 'ssl'
 
-ouvrir le dossier 'serveur' dans vscode
+- ouvrir un terminal dans le dossier 'serveur'
 
-copier/coller les fichiers de 'env' (et corriger l'extension des copies)
+````npm i````
 
-renseignez les ports (dev : 8080/4443 - prod : 80/443) dans ces fichiers
 
-installer le certificat et la key ssl (default.crt et default.key) dans le dossier 'ssl'
+### pour lancer le serveur :
+````npm run dev````
 
-ouvrir un terminal dans le dossier 'serveur'
+## CLIENT :
 
-npm i
+### pour lancer le client :
+- ouvrir le dossier 'client' dans vs code et lancer 'index.html' avec live server
 
-<br>
+- ou, lancer 'index.html' avec un serveur web
 
-* pour lancer le serveur :
+- sur le navigateur aller sur : https://localhost:4443 (ou http://localhost:8080)
 
-npm run dev
+## Développeurs
 
-<br><br><br>
+- [@jacquesgrana](https://github.com/jacquesgrana)
+- [@sofianedahamna](https://github.com/sofianedahamna)
+- [@NordyFly](https://github.com/NordyFly)
+- [@MrFrostize](https://github.com/MrFrostize)
 
-> CLIENT js pur avec bootstrap :
+## Tech Stack
 
-<br>
+**Client :** Javascript, Bootstrap.
 
-* pour lancer le client :
-
-ouvrir le dossier 'client' dans vs code et lancer 'index.html' avec live server
-
-ou, lancer 'index.html' avec un serveur web
-
-sur le navigateur aller sur : https://localhost:4443 (ou http://localhost:8080)
+**Serveur :** Node, Express.
