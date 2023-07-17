@@ -11,6 +11,7 @@ const container = createMarkup('div', '', document.body, [{ class: "container" }
 const sctnTitle = createMarkup('section', '', container, [{ class: "row" }]);
 const sctnSelect = createMarkup('section', '', container, [{ class: "d-flex flex-row justify-content-around my-5" }]);
 const sctnRecipes = createMarkup('section', '', container, [{ class: "row", id: 'section-card-recipes' }]);
+const recipeCardsContainer = document.getElementById('section-card-recipes'); // Élément parent statique
 
 /**
  * Insertion du Titre
@@ -46,8 +47,13 @@ document.getElementById('btnCreateRecipes').addEventListener('click', showModalC
  * Function déclencher par le listener sur le button creation recette
  */
 function showModalCreateRecipes() {
+    resetCreateRecipeModal();
+
+    
 
     const modal = document.getElementById('myModal');
+    const modalTitle = modal.querySelector('.modal-title');
+    modalTitle.textContent = "creation de recette";
     const bootstrapModal = new bootstrap.Modal(modal);
     bootstrapModal.show();
 
@@ -66,14 +72,17 @@ document.getElementById('btn-add-ingredient').addEventListener('click', addInput
  */
 function addInputIngredient() {
     const divCreateRecipesModal = document.getElementById('bloc-ingredient');
-    const divCreateRecipesModalInput = createMarkup('div', '', divCreateRecipesModal, [{ class: "d-flex flex-row" }])
-    createMarkup('input', '', divCreateRecipesModalInput, [{ class: "form-control my-1 mx-1", placeholder: "ingredient" }]);
-    createMarkup('input', '', divCreateRecipesModalInput, [{ class: " my-1 mx-1",type:'number'}]);
-    const selectCreateRecipes  =  createMarkup('select', 'Choisir une uniter', divCreateRecipesModalInput, [{ class: "unit form-select my-1 mx-1 "}]);
+    const divCreateRecipesModalInput = createMarkup('div', '', divCreateRecipesModal, [{ class: "d-flex flex-row" }]);
+    createMarkup('input', '', divCreateRecipesModalInput, [{ class: "form-control my-1 mx-1 ingredient-input", placeholder: "ingredient" }]);
+    createMarkup('input', '', divCreateRecipesModalInput, [{ class: "my-1 mx-1", type: 'number' }]);
+    const selectCreateRecipes = createMarkup('select', 'Choisir une uniter', divCreateRecipesModalInput, [{ class: "unit-select unit form-select my-1 mx-1" }]);
+    const ingredientInputs = document.querySelectorAll('.modal-body input.ingredient-input');
+    const quantityInputs = document.querySelectorAll('.modal-body input.quantity-input');
+    const unitSelects = document.querySelectorAll('.modal-body select.unit-select');
     fillSelectUnitCreateRecipesNew(arrayDataRecipes);
-}
- 
-
+  }
+  
+  
 
 
 if (document.location.href.toString().includes("client")) {
@@ -233,8 +242,8 @@ function createRecipesCard(dataRecipes) {
       });
       htmlContent += `<div class="card mx-2 my-2" style="width: 18rem;">
         <div class="card-body">
-          <h4 class="card-title" >Pays : ${recipe.gastronomy}</h4>
-          <h5 class="card-title">${recipe.title}</h5>
+          <h4 class="gas" >Pays : ${recipe.gastronomy}</h4>
+          <h5 class="card-title title">${recipe.title}</h5>
           <ul class="list-group">${ingredientsHtml}</ul>
           <button id="${recipe.id}" class="btn btn-success edit-recipes">Editer</button>
           <button id="${recipe.id}" class="btn btn-danger suppr">Supprimer</button>
@@ -243,11 +252,48 @@ function createRecipesCard(dataRecipes) {
     });
     sctnRecipes.innerHTML = htmlContent;
   }
-*/
 
+  recipeCardsContainer.addEventListener('click', (event) => {
+    if (event.target.classList.contains('edit-recipes')) {
+      let selectedCard = event.target.id;
+      console.log(`250`, selectedCard);
+      editRecipeCard(selectedCard);
+    }
+  });
+  
+  
+
+*/
+/** 
 /**
  * 
  * Fonction a appeler avec un listener dans le code de creation des card 
+ function editRecipeCard(selectedCard) {
+    resetCreateRecipeModal();
+ // Récupérer l'élément de la "card" de recette à éditer
+ let editButton = document.getElementById(selectedCard);
+ let recipeCard = editButton.closest('.card');
+
+ // Récupérer l'élément de titre de la recette à l'intérieur de la carte
+ let recipeTitle = recipeCard.querySelector('.card-title').textContent;
+
+  let recipeIngredients = recipeCard.querySelector('.list-group').textContent;
+ 
+  let recipesGastronomy = recipeCard.querySelector('.gas').textContent;
+
+  // Créer un objet recette avec les informations récupérées
+  let recipe = {
+    title: recipeTitle,
+    ingredients: recipeIngredients,
+    gastronomy: recipesGastronomy
+  };
+
+  // Appeler la fonction pour afficher la modal d'édition avec les éléments de la recette
+  showEditModal(recipe);
+}
+function showEditModal(recipe) {
+    // Récupérer la modal d'édition depuis le DOM
+    const modal = document.getElementById('myModal');
  
   // Fonction pour éditer une "card" de recette
   function editRecipeCard(cardId) {
@@ -258,30 +304,42 @@ function createRecipesCard(dataRecipes) {
     let ingredientsElement = recipeCard.querySelector(".recipe-ingredients");
     let quantitiesElement = recipeCard.querySelector(".recipe-quantities");
   
-    // Créer des champs de texte pour les ingrédients et les quantités
-    let ingredientsInput = document.createElement("textarea");
-    ingredientsInput.value = ingredientsElement.textContent;
-    recipeCard.replaceChild(ingredientsInput, ingredientsElement);
+    const modalTitle = modal.querySelector('.modal-title');
+    modalTitle.textContent = "Modification de recette";
+
+    // Récupérer les éléments de la modal
+    const recipeNameInput = modal.querySelector('.modal-body input[placeholder="Nom de votre recette"]');
+    const gastronomyInput = modal.querySelector('.modal-body input[placeholder="Gastronomie"]');
+    const ingredientInputs = modal.querySelectorAll('.modal-body input[placeholder="ingredient"]');
+    const unitSelects = modal.querySelectorAll('.modal-body select');
   
-    let quantitiesInput = document.createElement("textarea");
-    quantitiesInput.value = quantitiesElement.textContent;
-    recipeCard.replaceChild(quantitiesInput, quantitiesElement);
+    // Pré-remplir les champs de la modal avec les valeurs de la recette
+    recipeNameInput.value = recipe.title;
+    gastronomyInput.value = recipe.gastronomy;
   
-    // Créer un bouton de soumission pour sauvegarder les modifications
-    let saveButton = document.createElement("button");
-    saveButton.textContent = "Enregistrer";
-    saveButton.addEventListener("click", function() {
-      // Mettre à jour les éléments des ingrédients et des quantités avec les valeurs des champs de texte
-      ingredientsElement.textContent = ingredientsInput.value;
-      quantitiesElement.textContent = quantitiesInput.value;
+    // Pré-remplir les champs d'ingrédients avec les valeurs de la recette
+    if (Array.isArray(recipe.ingredients)) {
+        recipe.ingredients.forEach((ingredient, index) => {
+          if (ingredientInputs[index]) {
+            ingredientInputs[index].value = ingredient.name;
+          }
+          if (quantityInputs[index]) {
+            quantityInputs[index].value = ingredient.quantity;
+          }
+          if (unitSelects[index]) {
+            // Pré-sélectionner l'option correspondant à l'unité de l'ingrédient
+            const option = unitSelects[index].querySelector(`option[value="${ingredient.unit}"]`);
+            if (option) {
+              option.selected = true;
+            }
+          }
+        });
+      }
+      
   
-      // Supprimer les champs de texte et réafficher les éléments de la "card" de recette
-      recipeCard.replaceChild(ingredientsElement, ingredientsInput);
-      recipeCard.replaceChild(quantitiesElement, quantitiesInput);
-    });
-  
-    // Ajouter le bouton de sauvegarde à la "card" de recette
-    recipeCard.appendChild(saveButton);
+    // Afficher la modal
+    const bootstrapModal = new bootstrap.Modal(modal);
+    bootstrapModal.show();
   }
   
   const btnEditCard = document.getElementsByClassName('edit-recipes');
@@ -367,6 +425,9 @@ function toggleEditInputs(card) {
 
 
 
+  
+  
+ 
 
 
 /**
@@ -495,5 +556,33 @@ function fillSelectUnitCreateRecipes(dataRecipes) {
         return unit;
     }
   }
+  
+  /**
+   * Reset de la modal avant appel pour la creation de recette 
+  */
+ function resetCreateRecipeModal() {
+  const modal = document.getElementById('myModal');
+  const recipeNameInput = modal.querySelector('.modal-body input[placeholder="Nom de votre recette"]');
+  const gastronomyInput = modal.querySelector('.modal-body input[placeholder="Gastronomie"]');
+  const ingredientInputs = modal.querySelectorAll('.modal-body input.ingredient-input');
+  const quantityInputs = modal.querySelectorAll('.modal-body input[type="number"]');
+  const unitSelects = modal.querySelectorAll('.modal-body select.unit-select');
+
+  // Supprimer les inputs supplémentaires
+  ingredientInputs.forEach((input, index) => {
+    if (index > 0) {
+      input.parentNode.remove();
+      quantityInputs[index].parentNode.remove(); // Supprimer également l'élément de quantité correspondant
+    }
+  });
+
+  // Réinitialiser les champs
+  recipeNameInput.value = "";
+  gastronomyInput.value = "";
+  ingredientInputs.forEach(input => input.value = "");
+  quantityInputs.forEach(input => input.value = ""); // Réinitialiser également les champs de quantité
+  unitSelects.forEach(select => select.selectedIndex = 0);
+}
+
   
   
