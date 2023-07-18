@@ -252,7 +252,7 @@ async function getRecipesByGastronomyName(selectedCountry) {
 selectShowRecipes.addEventListener('change', (event) => {
     event.preventDefault();
     let selectedId = event.target.value;
-    console.log(`ligne 197 selectedCountry`, selectedId);
+    console.log(`ligne 255 selectedCountry`, selectedId);
     let filteredRecipes = arrayDataRecipes.filter(recipe => recipe.id === selectedId);
     //getRecipesByName(selectedId);
     createRecipesCard(filteredRecipes);
@@ -297,8 +297,8 @@ function createRecipesCard(dataRecipes) {
     // Création de la carte de recette avec l'index comme identifiant unique
     htmlContent += `<div class="card mx-2 my-2" id="${recipe.id}" style="width: 18rem;">
       <div class="card-body">
-        <h4 class="card-title">Pays : ${recipe.gastronomy}</h4>
-        <h5 class="card-title">${recipe.title}</h5>
+        <h4 class="card-title">Pays :${recipe.gastronomy}</h4>
+        <h5 class="card-title-element">${recipe.title}</h5>
         <ul class="list-group recipe-ingredients">${ingredientsHtml}</ul>
         <button id="edit-${index}" class="btn btn-success edit-recipes">Editer</button>
         <button id="delete-${index} " class="btn btn-danger suppr">Supprimer</button>
@@ -363,12 +363,12 @@ function updateCardData(recipeId, updatedRecipe) {
     return;
   }
 
-  const titleElement = recipeCard.querySelector('.card-title');
+  const titleElement = recipeCard.querySelector('.card-title-element');
   const gastronomyElement = recipeCard.querySelector('.card-gastronomy');
   const ingredientElements = recipeCard.querySelectorAll('.list-group-item');
 
   titleElement.textContent = updatedRecipe.title;
-  gastronomyElement.textContent = `Pays : ${updatedRecipe.gastronomy}`;
+  gastronomyElement.textContent = updatedRecipe.gastronomy;
 
   updatedRecipe.ingredients.forEach((updatedIngredient, index) => {
     const ingredientElement = ingredientElements[index];
@@ -411,43 +411,43 @@ async function saveRecipeOnServer(recipeId, updatedRecipe) {
 
 
 function toggleEditInputs(card) {
-  const ingredientElements = card.querySelectorAll(".list-group-item");
-  const titleElement = card.querySelector(".card-title");
-  ingredientElements.forEach(ingredientElement => {
-    const nameElement = ingredientElement.querySelector(".ingredient-name");
-    const quantityElement = ingredientElement.querySelector(".ingredient-quantity");
-    const unitElement = ingredientElement.querySelector(".ingredient-unit");
-    const inputElement = ingredientElement.querySelector(".ingredient-input");
-    const editButton = card.querySelector(".edit-recipes");
-
-    if (inputElement.style.display === "none") {
-      inputElement.style.display = "inline-block";
-      quantityElement.style.display = "none";
-      editButton.textContent = "Enregistrer";
-    } else {
-      inputElement.style.display = "none";
-      quantityElement.style.display = "inline-block";
-      editButton.textContent = "Editer";
-      quantityElement.textContent = inputElement.value;
-
-      // Récupérer les données mises à jour
-      const updatedData = {
-        title: titleElement.textContent.trim(),
-        ingredients: Array.from(ingredientElements).map(element => {
-          return {
-            name: element.querySelector(".ingredient-name").textContent.trim(),
-            quantity: element.querySelector(".ingredient-input").value.trim(),
-            unit: element.querySelector(".ingredient-unit").textContent.trim()
-          };
-        })
-      };
-
-      const recipeId = card.id;
-      saveRecipeOnServer(recipeId, updatedData);
-    }
-  });
-}
-
+    const ingredientElements = card.querySelectorAll(".list-group-item");
+    const titleElement = card.querySelector(".card-title-element"); // Correction : Utiliser la classe "card-title" pour récupérer le titre de la recette
+    ingredientElements.forEach(ingredientElement => {
+      const nameElement = ingredientElement.querySelector(".ingredient-name");
+      const quantityElement = ingredientElement.querySelector(".ingredient-quantity");
+      const unitElement = ingredientElement.querySelector(".ingredient-unit");
+      const inputElement = ingredientElement.querySelector(".ingredient-input");
+      const editButton = card.querySelector(".edit-recipes");
+  
+      if (inputElement.style.display === "none") {
+        inputElement.style.display = "inline-block";
+        quantityElement.style.display = "none";
+        editButton.textContent = "Enregistrer";
+      } else {
+        inputElement.style.display = "none";
+        quantityElement.style.display = "inline-block";
+        editButton.textContent = "Editer";
+        quantityElement.textContent = inputElement.value;
+  
+        // Récupérer les données mises à jour
+        const updatedData = {
+          title: titleElement.textContent.trim(),
+          ingredients: Array.from(ingredientElements).map(element => {
+            return {
+              name: element.querySelector(".ingredient-name").textContent.trim(),
+              quantity: element.querySelector(".ingredient-input").value.trim(),
+              unit: element.querySelector(".ingredient-unit").textContent.trim()
+            };
+          })
+        };
+  
+        const recipeId = card.id;
+        saveRecipeOnServer(recipeId, updatedData);
+      }
+    });
+  }
+  
 
 
 
@@ -473,7 +473,7 @@ function fillSelectPerCountry(dataRecipes) {
  * Remplissage du select par ingredient
  */
 function fillSelectPerIngredient(dataRecipes) {
-    console.log("ligne 152 FillSelectPerIngredient :", dataRecipes);
+    console.log("ligne 476 FillSelectPerIngredient :", dataRecipes);
     const selectPerIngredient = document.getElementById("select-per-ingredient");
     let htmlContent = "<option value='empty' selected>Choisir un Ingredient</option>";
     const uniqueIngredients = new Set();
