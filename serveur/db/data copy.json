@@ -81,22 +81,6 @@
               "unit": "UNIT_PACK"
             }
           ]
-        },
-        {
-          "title": "gateau a la broche",
-          "ingredients": [
-            {
-              "name": "oeuf",
-              "quantity": "12",
-              "unit": "UNIT_OBJECT"
-            },
-            {
-              "name": "sucre",
-              "quantity": "1",
-              "unit": "UNIT_KILOGRAM"
-            }
-          ],
-          "id": "741c3a4b-3ccb-4fb0-96b6-936c3bec595d"
         }
       ]
     },
