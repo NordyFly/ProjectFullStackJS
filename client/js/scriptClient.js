@@ -297,7 +297,7 @@ function createRecipesCard(dataRecipes) {
     // Création de la carte de recette avec l'index comme identifiant unique
     htmlContent += `<div class="card mx-2 my-2" id="${recipe.id}" style="width: 18rem;">
       <div class="card-body">
-        <h4 class="card-title">Pays :${recipe.gastronomy}</h4>
+        <h4 class="card-title">Pays : ${recipe.gastronomy}</h4>
         <h5 class="card-title-element">${recipe.title}</h5>
         <ul class="list-group recipe-ingredients">${ingredientsHtml}</ul>
         <button id="edit-${index}" class="btn btn-success edit-recipes">Editer</button>

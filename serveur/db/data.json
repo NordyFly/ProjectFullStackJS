@@ -9,12 +9,12 @@
           "ingredients": [
             {
               "name": "pomme de terre",
-              "quantity": "162",
+              "quantity": "1",
               "unit": "objet"
             },
             {
               "name": "fromage à raclette",
-              "quantity": "300",
+              "quantity": "30",
               "unit": "gramme"
             }
           ],
