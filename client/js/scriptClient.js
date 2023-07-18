@@ -22,7 +22,7 @@ const Title = createMarkup('h1', 'Master Cook', sctnTitle, [{ class: "text-cente
  */
 const divContentsctnSelectShowRecipes = createMarkup('div', '', sctnSelect, [{ class: "d-flex justify-content-center flex-column" }]);
 const labelShowRecipes = createMarkup('label', 'Choisir une recette', divContentsctnSelectShowRecipes, [{ class: "form-control" }]);
-const selectShowRecipes = createMarkup('select', 'Choisir une recette', divContentsctnSelectShowRecipes, [{ class: "form-select", id:"select-all-recipes" }]);
+const selectShowRecipes = createMarkup('select', 'Choisir une recette', divContentsctnSelectShowRecipes, [{ class: "form-select", id: "select-all-recipes" }]);
 /**
  * creation select show per country
  */
@@ -50,7 +50,7 @@ document.getElementById('btnCreateRecipes').addEventListener('click', showModalC
 function showModalCreateRecipes() {
     //resetCreateRecipeModal();
 
-    
+
 
     const modal = document.getElementById('myModal');
     const bootstrapModal = new bootstrap.Modal(modal);
@@ -75,9 +75,9 @@ document.getElementById('btn-add-ingredient').addEventListener('click', addInput
     createMarkup('input', '', divCreateRecipesModalInput, [{ class: "my-1 mx-1", type: 'number' }]);
     const selectCreateRecipes = createMarkup('select', 'Choisir une uniter', divCreateRecipesModalInput, [{ class: "unit-select unit form-select my-1 mx-1" }]);
     fillSelectUnitCreateRecipesNew(arrayDataRecipes);
-  }
-  
-  
+}
+
+
 
 
 if (document.location.href.toString().includes("client")) {
@@ -99,7 +99,7 @@ async function getAllRecipes() {
                 'Access-Control-Allow-Origin': '*'
             }
         });
-        
+
         const dataRecipes = await response.json();
         arrayDataRecipes = dataRecipes;
         createRecipesCard(dataRecipes);
@@ -115,22 +115,22 @@ async function getAllRecipes() {
     }
 }
 
- //const selectRecipes = document.getElementById('select-all-recipes');
-//selectPerCountry = document.getElementById('select-per-country');
 
 /**
  * Listener pour la recuperation des recette par ingredient
  */
- const selectPerIngredient = document.getElementById('select-per-ingredient');
+const selectPerIngredient = document.getElementById('select-per-ingredient');
 
- selectPerIngredient.addEventListener('change', (event) => {
-   console.log(`119`);
+selectPerIngredient.addEventListener('change', (event) => {
+    console.log(`119`);
     let selectedIngredient = event.target.value;
-    let filteredRecipes = arrayDataRecipes
-    getRecipesByIngredientName(selectedIngredient);
-    createRecipesCard(filteredRecipes); // Appeler la fonction avec le tableau filtré
+
     if (selectedIngredient == 'empty') {
         getAllRecipes();
+    } else {
+        let filteredRecipes = arrayDataRecipes
+        getRecipesByIngredientName(selectedIngredient);
+        createRecipesCard(filteredRecipes); // Appeler la fonction avec le tableau filtré
     }
 });
 /**
@@ -145,11 +145,11 @@ async function getRecipesByIngredientName(selectedIngredient) {
                 'Access-Control-Allow-Origin': '*'
             }
         });
-        
+
         const dataRecipes = await response.json();
         arrayDataRecipes = dataRecipes;
         createRecipesCard(arrayDataRecipes);
-        console.log("ligne 97",  arrayDataRecipes);
+        console.log("ligne 97", arrayDataRecipes);
 
     }
     catch (error) {
@@ -161,12 +161,13 @@ async function getRecipesByIngredientName(selectedIngredient) {
  */
 selectPerCountry.addEventListener('change', (event) => {
     let selectedCountry = event.target.value;
-    console.log(`ligne 160 selectedCountry`,selectedCountry);
-    let filteredRecipes = arrayDataRecipes.filter(recipe => recipe.gastronomy === selectedCountry);
-    getRecipesByGastronomyName(selectedCountry);
-    createRecipesCard(filteredRecipes);
     if (selectedCountry == 'empty') {
         getAllRecipes();
+    } else {
+        console.log(`ligne 160 selectedCountry`, selectedCountry);
+        getRecipesByGastronomyName(selectedCountry);
+        let filteredRecipes = arrayDataRecipes
+        createRecipesCard(filteredRecipes);
     }
 });
 
@@ -175,7 +176,7 @@ selectPerCountry.addEventListener('change', (event) => {
  */
 async function getRecipesByGastronomyName(selectedCountry) {
     try {
-        console.log(`171`,selectedCountry);
+        console.log(`171`, selectedCountry);
         const response = await fetch(`${endPoint}/recipes/?gastronomy=${selectedCountry}`, {
             method: 'get',
             headers: {
@@ -183,11 +184,11 @@ async function getRecipesByGastronomyName(selectedCountry) {
                 'Access-Control-Allow-Origin': '*'
             }
         });
-        
+
         const dataRecipes = await response.json();
         arrayDataRecipes = dataRecipes;
         createRecipesCard(arrayDataRecipes);
-        console.log("ligne 183",  arrayDataRecipes);
+        console.log("ligne 183", arrayDataRecipes);
 
     }
     catch (error) {
@@ -195,10 +196,13 @@ async function getRecipesByGastronomyName(selectedCountry) {
     }
 }
 
+/**
+ * Listener pour la recuperation des recette pour le select des recette
+ */
 selectShowRecipes.addEventListener('change', (event) => {
     event.preventDefault();
     let selectedId = event.target.value;
-    console.log(`ligne 197 selectedCountry`,selectedId);
+    console.log(`ligne 197 selectedCountry`, selectedId);
     let filteredRecipes = arrayDataRecipes.filter(recipe => recipe.id === selectedId);
     //getRecipesByName(selectedId);
     createRecipesCard(filteredRecipes);
@@ -215,73 +219,106 @@ function fillSelectAllRecipes(dataRecipes) {
     const selectShowRecipes = document.getElementById("select-all-recipes");
     let htmlContent = "<option value='empty' selected>Choisir une recette</option>";
     dataRecipes.forEach(u => {
-            htmlContent += `<option value="${u.id}">${u.title} : ${u.gastronomy}</option>`;
-           //console.log(`ligne 121 `,htmlContent);
-        })
-        selectShowRecipes.innerHTML = htmlContent;
+        htmlContent += `<option value="${u.id}">${u.title} : ${u.gastronomy}</option>`;
+        //console.log(`ligne 121 `,htmlContent);
+    })
+    selectShowRecipes.innerHTML = htmlContent;
 }
 
 
 // Essaye ce code by Noureddine
 function createRecipesCard(dataRecipes) {
-  const sctnRecipes = document.getElementById('section-card-recipes');
-  let htmlContent = "";
-  dataRecipes.forEach((recipe, index) => { // Parcours de chaque recette dans les données
-    let ingredientsHtml = "";
-    recipe.ingredients.forEach(ingredient => { // Parcours de chaque ingrédient dans la recette
-      const convertedUnit = convertUnit(ingredient.unit); // Conversion de l'unité de mesure
-      // Création des éléments HTML pour chaque ingrédient, y compris un champ de texte caché pour l'édition
-      ingredientsHtml += `
+    const sctnRecipes = document.getElementById('section-card-recipes');
+    let htmlContent = "";
+    dataRecipes.forEach((recipe, index) => { // Parcours de chaque recette dans les données
+        let ingredientsHtml = "";
+        recipe.ingredients.forEach(ingredient => { // Parcours de chaque ingrédient dans la recette
+            const convertedUnit = convertUnit(ingredient.unit); // Conversion de l'unité de mesure
+            // Création des éléments HTML pour chaque ingrédient, y compris un champ de texte caché pour l'édition
+            ingredientsHtml += `
         <li class="list-group-item my-2 rounded border border-black">
           <span class="ingredient-name">${ingredient.name}</span> : 
           <span class="ingredient-quantity">${ingredient.quantity}</span>
           <span class="ingredient-unit">${convertedUnit}</span>
           <input type="text" class="ingredient-input" value="${ingredient.quantity}" style="display: none;">
         </li>`;
-    });
-    // Création de la carte de recette avec l'index comme identifiant unique
-    htmlContent += `<div class="card mx-2 my-2" id="card${index}" style="width: 18rem;">
+        });
+        // Création de la carte de recette avec l'index comme identifiant unique
+        htmlContent += `<div class="card mx-2 my-2" id="${recipe.id}" style="width: 18rem;">
       <div class="card-body">
         <h4 class="card-title" >Pays : ${recipe.gastronomy}</h4>
         <h5 class="card-title">${recipe.title}</h5>
         <ul class="list-group recipe-ingredients">${ingredientsHtml}</ul>
         <button id="edit-${index}" class="btn btn-success edit-recipes">Editer</button>
-        <button id="delete-${index}" class="btn btn-danger suppr">Supprimer</button>
+        <button id="delete-${index} " class="btn btn-danger suppr">Supprimer</button>
       </div>
     </div>`;
-  });
-  sctnRecipes.innerHTML = htmlContent; // Ajout du contenu HTML des cartes de recette dans la section 'section-card-recipes'
-
-  const btnEditCards = document.getElementsByClassName('edit-recipes'); // Sélection de tous les boutons d'édition
-
-  for (let i = 0; i < btnEditCards.length; i++) { // Parcours de chaque bouton d'édition
-    btnEditCards[i].addEventListener('click', (event) => { // Ajout d'un écouteur d'événement au clic sur le bouton d'édition
-      const card = event.target.closest('.card'); // Récupération de la carte parente du bouton
-      if (card) {
-        toggleEditInputs(card); // Appel de la fonction pour basculer entre l'affichage et l'édition des ingrédients
-      }
     });
-  }
+    sctnRecipes.innerHTML = htmlContent; // Ajout du contenu HTML des cartes de recette dans la section 'section-card-recipes'
+
+    const btnEditCards = document.getElementsByClassName('edit-recipes'); // Sélection de tous les boutons d'édition
+    const btnSupprCard = document.getElementsByClassName('suppr'); // Sélection de tous les boutons suppresion
+
+    for (let i = 0; i < btnEditCards.length; i++) { // Parcours de chaque bouton d'édition
+        btnEditCards[i].addEventListener('click', (event) => { // Ajout d'un écouteur d'événement au clic sur le bouton d'édition
+            const card = event.target.closest('.card'); // Récupération de la carte parente du bouton
+            if (card) {
+                toggleEditInputs(card); // Appel de la fonction pour basculer entre l'affichage et l'édition des ingrédients
+            }
+        });
+    }
+    for (let i = 0; i < btnSupprCard.length; i++) { // Parcours de chaque bouton d'édition
+        btnSupprCard[i].addEventListener('click', (event) => { // Ajout d'un écouteur d'événement au clic sur le bouton d'édition
+            const card = event.target.closest('.card'); // Récupération de la carte parente du bouton
+            if (card) {
+               let recipeId = card.id;
+               console.log(`276`, recipeId);
+               deleteRecipes(recipeId);
+            }
+        });
+    }
 }
 
-function toggleEditInputs(card) {
-  const ingredientElements = card.querySelectorAll(".list-group-item"); // Sélection de tous les éléments d'ingrédients
-  ingredientElements.forEach(ingredientElement => { // Parcours de chaque élément d'ingrédient
-    const quantityElement = ingredientElement.querySelector(".ingredient-quantity"); // Sélection de l'élément de quantité
-    const inputElement = ingredientElement.querySelector(".ingredient-input"); // Sélection de l'élément de champ de texte
-    const editButton = card.querySelector(".edit-recipes"); // Sélection du bouton d'édition
+async function deleteRecipes(recipeId) {
+    try {
+        console.log(`284`, recipeId);
+        const response = await fetch(`${endPoint}/recipes/${recipeId}`, {
+            method: 'delete',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
 
-    if (inputElement.style.display === "none") { // Si le champ de texte est caché, on le rend visible pour l'édition
-      inputElement.style.display = "inline-block";
-      quantityElement.style.display = "none";
-      editButton.textContent = "Enregistrer"; // Changement du texte du bouton pour indiquer que l'édition est en cours
-    } else { // Si le champ de texte est visible, on le cache et enregistre la nouvelle valeur
-      inputElement.style.display = "none";
-      quantityElement.style.display = "inline-block";
-      editButton.textContent = "Editer"; // Changement du texte du bouton pour indiquer que l'on peut éditer
-      quantityElement.textContent = inputElement.value; // Enregistrement de la nouvelle valeur dans l'élément span de quantité
+        const deletedId = await response.json(); 
+        console.log("ligne 183", deletedId);
+        getAllRecipes();
+       
+
+    } catch (error) {
+        console.error(`erreur`, error);
     }
-  });
+}
+
+
+function toggleEditInputs(card) {
+    const ingredientElements = card.querySelectorAll(".list-group-item"); // Sélection de tous les éléments d'ingrédients
+    ingredientElements.forEach(ingredientElement => { // Parcours de chaque élément d'ingrédient
+        const quantityElement = ingredientElement.querySelector(".ingredient-quantity"); // Sélection de l'élément de quantité
+        const inputElement = ingredientElement.querySelector(".ingredient-input"); // Sélection de l'élément de champ de texte
+        const editButton = card.querySelector(".edit-recipes"); // Sélection du bouton d'édition
+
+        if (inputElement.style.display === "none") { // Si le champ de texte est caché, on le rend visible pour l'édition
+            inputElement.style.display = "inline-block";
+            quantityElement.style.display = "none";
+            editButton.textContent = "Enregistrer"; // Changement du texte du bouton pour indiquer que l'édition est en cours
+        } else { // Si le champ de texte est visible, on le cache et enregistre la nouvelle valeur
+            inputElement.style.display = "none";
+            quantityElement.style.display = "inline-block";
+            editButton.textContent = "Editer"; // Changement du texte du bouton pour indiquer que l'on peut éditer
+            quantityElement.textContent = inputElement.value; // Enregistrement de la nouvelle valeur dans l'élément span de quantité
+        }
+    });
 }
 
 
@@ -334,113 +371,112 @@ function fillSelectUnitCreateRecipes(dataRecipes) {
     const selectCreateRecipes = document.getElementsByClassName('unit');
     let htmlContent = "<option value='empty' selected>Choisir une unité</option>";
     const uniqueUnits = new Set();
-  
+
     dataRecipes.forEach(recipe => {
-      recipe.ingredients.forEach(ingredient => {
-        uniqueUnits.add(convertUnit(ingredient.unit));
-      });
+        recipe.ingredients.forEach(ingredient => {
+            uniqueUnits.add(convertUnit(ingredient.unit));
+        });
     });
-  
+
     uniqueUnits.forEach(unit => {
-      htmlContent += `<option value="${unit}">${unit}</option>`;
+        htmlContent += `<option value="${unit}">${unit}</option>`;
     });
-  
+
     selectUnitCreateRecipes.innerHTML = htmlContent;
     selectCreateRecipes.innerHTML = htmlContent;
-  }
-  
+}
 
-  
-  function fillSelectUnitCreateRecipesNew(arrayDataRecipes) {
+
+
+function fillSelectUnitCreateRecipesNew(arrayDataRecipes) {
     console.log("ligne 227 fillSelectUnitCreateRecipesNew:", arrayDataRecipes);
     const selectCreateRecipesList = document.querySelectorAll('.unit');
     let htmlContent = "<option value='empty' selected>Choisir une unité</option>";
     const uniqueUnits = new Set();
-  
+
     arrayDataRecipes.forEach(recipe => {
-      recipe.ingredients.forEach(ingredient => {
-        uniqueUnits.add(convertUnit(ingredient.unit));
-        console.log(`tableau`, recipe.ingredients);
-      });
+        recipe.ingredients.forEach(ingredient => {
+            uniqueUnits.add(convertUnit(ingredient.unit));
+            console.log(`tableau`, recipe.ingredients);
+        });
     });
-  
+
     uniqueUnits.forEach(unit => {
-      htmlContent += `<option value="${unit}">${unit}</option>`;
-      console.log(`htmlContent`, htmlContent);
+        htmlContent += `<option value="${unit}">${unit}</option>`;
+        console.log(`htmlContent`, htmlContent);
     });
-  
+
     selectCreateRecipesList.forEach(select => {
-      select.innerHTML = htmlContent;
+        select.innerHTML = htmlContent;
     });
-  }
-  
-  
-
-  /**
-   *conversion des uniter 
-   */
-  function convertUnit(unit) {
-    switch (unit) {
-      case "UNIT_GRAM":
-        return "gramme";
-      case "UNIT_KILOGRAM":
-        return "kilogrammes";
-      case "UNIT_OBJECT":
-        return "objet";
-      case "UNIT_PACK":
-        return "sachet";
-      case "UNIT_SLICE":
-        return "tranche";
-      case "UNIT_MILLILITERS":
-        return "millilitre";
-      case "UNIT_LITER":
-        return "litre";
-      case "UNIT_TABLESPOON":
-        return "cuillère à soupe";
-      case "UNIT_TEASPOON":
-        return "cuillère à café";
-      case "UNIT_CUBE":
-        return "cube";
-      case "UNIT_POD":
-        return "gousse";
-      case "UNIT_PINCH":
-        return "pincée";
-      case "UNIT_PM":
-        return "quantité selon le goût du cuisinier";
-      default:
-        return unit;
-    }
-  }
-  
-  /**
-   * Reset de la modal avant appel pour la creation de recette 
-  */
- function resetCreateRecipeModal() {
-  const modal = document.getElementById('myModal');
-  const recipeNameInput = modal.querySelector('.modal-body input[placeholder="Nom de votre recette"]');
-  const gastronomyInput = modal.querySelector('.modal-body input[placeholder="Gastronomie"]');
-  const ingredientInputs = modal.querySelectorAll('.modal-body input');
-  const quantityInputs = modal.querySelectorAll('.modal-body input[type="number"]');
-  const unitSelects = modal.querySelectorAll('.modal-body select.unit-select');
-
-  // Supprimer les inputs supplémentaires
-  ingredientInputs.forEach((input, index) => {
-    if (index > 0) {
-      input.parentNode.remove();
-      if ( quantityInputs[index]) {
-        quantityInputs[index].parentNode.remove(); // Supprimer également l'élément de quantité correspondant
-      }
-      
-    }
-  });
-
-  // Réinitialiser les champs
-  recipeNameInput.value = "";
-  gastronomyInput.value = "";
-  ingredientInputs.forEach(input => input.value = "");
-  quantityInputs.forEach(input => input.value = ""); // Réinitialiser également les champs de quantité
-  unitSelects.forEach(select => select.selectedIndex = 0);
 }
 
-  
-  
+
+
+/**
+ *conversion des uniter 
+ */
+function convertUnit(unit) {
+    switch (unit) {
+        case "UNIT_GRAM":
+            return "gramme";
+        case "UNIT_KILOGRAM":
+            return "kilogrammes";
+        case "UNIT_OBJECT":
+            return "objet";
+        case "UNIT_PACK":
+            return "sachet";
+        case "UNIT_SLICE":
+            return "tranche";
+        case "UNIT_MILLILITERS":
+            return "millilitre";
+        case "UNIT_LITER":
+            return "litre";
+        case "UNIT_TABLESPOON":
+            return "cuillère à soupe";
+        case "UNIT_TEASPOON":
+            return "cuillère à café";
+        case "UNIT_CUBE":
+            return "cube";
+        case "UNIT_POD":
+            return "gousse";
+        case "UNIT_PINCH":
+            return "pincée";
+        case "UNIT_PM":
+            return "quantité selon le goût du cuisinier";
+        default:
+            return unit;
+    }
+}
+
+/**
+ * Reset de la modal avant appel pour la creation de recette 
+*/
+function resetCreateRecipeModal() {
+    const modal = document.getElementById('myModal');
+    const recipeNameInput = modal.querySelector('.modal-body input[placeholder="Nom de votre recette"]');
+    const gastronomyInput = modal.querySelector('.modal-body input[placeholder="Gastronomie"]');
+    const ingredientInputs = modal.querySelectorAll('.modal-body input');
+    const quantityInputs = modal.querySelectorAll('.modal-body input[type="number"]');
+    const unitSelects = modal.querySelectorAll('.modal-body select.unit-select');
+
+    // Supprimer les inputs supplémentaires
+    ingredientInputs.forEach((input, index) => {
+        if (index > 0) {
+            input.parentNode.remove();
+            if (quantityInputs[index]) {
+                quantityInputs[index].parentNode.remove(); // Supprimer également l'élément de quantité correspondant
+            }
+
+        }
+    });
+
+    // Réinitialiser les champs
+    recipeNameInput.value = "";
+    gastronomyInput.value = "";
+    ingredientInputs.forEach(input => input.value = "");
+    quantityInputs.forEach(input => input.value = ""); // Réinitialiser également les champs de quantité
+    unitSelects.forEach(select => select.selectedIndex = 0);
+}
+
+

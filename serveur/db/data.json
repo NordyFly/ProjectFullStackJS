@@ -1,208 +1,187 @@
 {
-    "recipes": [
-      {
-        "gastronomy": "France",
-        "recipes": [
-          {
-            "id": "97e9dad8-fe5a-454d-9797-ed85fecfcb09",
-            "title": "Raclette",
-            "ingredients": [
-              {
-                "name": "pomme de terre",
-                "quantity": 16,
-                "unit": "UNIT_OBJECT"
-              },
-              {
-                "name": "fromage à raclette",
-                "quantity": 300,
-                "unit": "UNIT_GRAM"
-              }
-            ]
-          },
-          {
-            "id": "a7f8c252-3704-4601-8cfa-a05c171eea72",
-            "title": "Pizza",
-            "ingredients": [
-              {
-                "name": "tomate",
-                "quantity": 1,
-                "unit": "UNIT_KILOGRAM"
-              },
-              {
-                "name": "fromage à raclette",
-                "quantity": 300,
-                "unit": "UNIT_GRAM"
-              },
-              {
-                "name": "oignons",
-                "quantity": 1,
-                "unit": "UNIT_OBJECT"
-              }
-            ]
-          },
-          {
-            "id": "4991076f-fda0-4413-a1d0-dc2f8310f26e",
-            "title": "Pot au feu",
-            "ingredients": [
-              {
-                "name": "viande de veau",
-                "quantity": 1,
-                "unit": "UNIT_KILOGRAM"
-              },
-              {
-                "name": "carotte",
-                "quantity": 12,
-                "unit": "UNIT_OBJECT"
-              },
-              {
-                "name": "bouillon cube",
-                "quantity": 1,
-                "unit": "UNIT_CUBE"
-              }
-            ]
-          },
-          {
-            "id": "ac89a1f3-0009-4ae6-8aa9-fc1612b9b544",
-            "title": "Quiche lorraine",
-            "ingredients": [
-              {
-                "name": "jambon",
-                "quantity": 1,
-                "unit": "UNIT_SLICE"
-              },
-              {
-                "name": "crème fraiche",
-                "quantity": 250,
-                "unit": "UNIT_MILLILITERS"
-              },
-              {
-                "name": "fromage rapé",
-                "quantity": 1,
-                "unit": "UNIT_PACK"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "gastronomy": "Chine",
-        "recipes": [
-          {
-            "id": "ac69eaf6-822e-4d5f-a453-6de5fe225331",
-            "title": "Nouilles",
-            "ingredients": [
-              {
-                "name": "viande de veau",
-                "quantity": 1,
-                "unit": "UNIT_KILOGRAM"
-              },
-              {
-                "name": "carotte",
-                "quantity": 12,
-                "unit": "UNIT_OBJECT"
-              },
-              {
-                "name": "bouillon cube",
-                "quantity": 1,
-                "unit": "UNIT_CUBE"
-              }
-            ]
-          },
-          {
-            "id": "0e10bfcf-d32b-4f24-bed8-230c8c179929",
-            "title": "Brioche Chinois",
-            "ingredients": [
-              {
-                "name": "farine",
-                "quantity": 4,
-                "unit": "UNIT_TABLESPOON"
-              },
-              {
-                "name": "sucre",
-                "quantity": 4,
-                "unit": "UNIT_TEASPOON"
-              },
-              {
-                "name": "sel",
-                "quantity": 1,
-                "unit": "UNIT_PINCH"
-              }
-            ]
-          },
-          {
-            "id": "79a5b0f2-4a3d-4411-ba47-c099692aec97",
-            "title": "Soupe chinoise",
-            "ingredients": [
-              {
-                "name": "viande de pangolin",
-                "quantity": 4,
-                "unit": "UNIT_PM"
-              },
-              {
-                "name": "sucre",
-                "quantity": 4,
-                "unit": "UNIT_TEASPOON"
-              },
-              {
-                "name": "sel",
-                "quantity": 1,
-                "unit": "UNIT_PINCH"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "gastronomy": "Italie",
-        "recipes": [
-          {
-            "id": "d9a21518-1771-48a0-ba2a-a799a648dbd8",
-            "title": "Pizza",
-            "ingredients": [
-              {
-                "name": "tomate",
-                "quantity": 1,
-                "unit": "UNIT_KILOGRAM"
-              },
-              {
-                "name": "fromage à raclette",
-                "quantity": 300,
-                "unit": "UNIT_GRAM"
-              },
-              {
-                "name": "oignons",
-                "quantity": 1,
-                "unit": "UNIT_OBJECT"
-              }
-            ]
-          },
-          {
-            "id": "1f5b1824-8c81-4980-9fb7-71b6a5c4a6d1",
-            "title": "Raviolis",
-            "ingredients": [
-              {
-                "name": "tomate",
-                "quantity": 1,
-                "unit": "UNIT_KILOGRAM"
-              },
-              {
-                "name": "viande de boeuf",
-                "quantity": 300,
-                "unit": "UNIT_GRAM"
-              },
-              {
-                "name": "oignons",
-                "quantity": 3,
-                "unit": "UNIT_OBJECT"
-              },
-              {
-                "name": "ail",
-                "quantity": 1,
-                "unit": "UNIT_POD"
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
+  "recipes": [
+    {
+      "gastronomy": "France",
+      "recipes": [
+        {
+          "id": "97e9dad8-fe5a-454d-9797-ed85fecfcb09",
+          "title": "Raclette",
+          "ingredients": [
+            {
+              "name": "pomme de terre",
+              "quantity": 16,
+              "unit": "UNIT_OBJECT"
+            },
+            {
+              "name": "fromage à raclette",
+              "quantity": 300,
+              "unit": "UNIT_GRAM"
+            }
+          ]
+        },
+        {
+          "id": "a7f8c252-3704-4601-8cfa-a05c171eea72",
+          "title": "Pizza",
+          "ingredients": [
+            {
+              "name": "tomate",
+              "quantity": 1,
+              "unit": "UNIT_KILOGRAM"
+            },
+            {
+              "name": "fromage à raclette",
+              "quantity": 300,
+              "unit": "UNIT_GRAM"
+            },
+            {
+              "name": "oignons",
+              "quantity": 1,
+              "unit": "UNIT_OBJECT"
+            }
+          ]
+        },
+        {
+          "id": "4991076f-fda0-4413-a1d0-dc2f8310f26e",
+          "title": "Pot au feu",
+          "ingredients": [
+            {
+              "name": "viande de veau",
+              "quantity": 1,
+              "unit": "UNIT_KILOGRAM"
+            },
+            {
+              "name": "carotte",
+              "quantity": 12,
+              "unit": "UNIT_OBJECT"
+            },
+            {
+              "name": "bouillon cube",
+              "quantity": 1,
+              "unit": "UNIT_CUBE"
+            }
+          ]
+        },
+        {
+          "id": "ac89a1f3-0009-4ae6-8aa9-fc1612b9b544",
+          "title": "Quiche lorraine",
+          "ingredients": [
+            {
+              "name": "jambon",
+              "quantity": 1,
+              "unit": "UNIT_SLICE"
+            },
+            {
+              "name": "crème fraiche",
+              "quantity": 250,
+              "unit": "UNIT_MILLILITERS"
+            },
+            {
+              "name": "fromage rapé",
+              "quantity": 1,
+              "unit": "UNIT_PACK"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "gastronomy": "Chine",
+      "recipes": [
+        {
+          "id": "ac69eaf6-822e-4d5f-a453-6de5fe225331",
+          "title": "Nouilles",
+          "ingredients": [
+            {
+              "name": "viande de veau",
+              "quantity": 1,
+              "unit": "UNIT_KILOGRAM"
+            },
+            {
+              "name": "carotte",
+              "quantity": 12,
+              "unit": "UNIT_OBJECT"
+            },
+            {
+              "name": "bouillon cube",
+              "quantity": 1,
+              "unit": "UNIT_CUBE"
+            }
+          ]
+        },
+        {
+          "id": "79a5b0f2-4a3d-4411-ba47-c099692aec97",
+          "title": "Soupe chinoise",
+          "ingredients": [
+            {
+              "name": "viande de pangolin",
+              "quantity": 4,
+              "unit": "UNIT_PM"
+            },
+            {
+              "name": "sucre",
+              "quantity": 4,
+              "unit": "UNIT_TEASPOON"
+            },
+            {
+              "name": "sel",
+              "quantity": 1,
+              "unit": "UNIT_PINCH"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "gastronomy": "Italie",
+      "recipes": [
+        {
+          "id": "d9a21518-1771-48a0-ba2a-a799a648dbd8",
+          "title": "Pizza",
+          "ingredients": [
+            {
+              "name": "tomate",
+              "quantity": 1,
+              "unit": "UNIT_KILOGRAM"
+            },
+            {
+              "name": "fromage à raclette",
+              "quantity": 300,
+              "unit": "UNIT_GRAM"
+            },
+            {
+              "name": "oignons",
+              "quantity": 1,
+              "unit": "UNIT_OBJECT"
+            }
+          ]
+        },
+        {
+          "id": "1f5b1824-8c81-4980-9fb7-71b6a5c4a6d1",
+          "title": "Raviolis",
+          "ingredients": [
+            {
+              "name": "tomate",
+              "quantity": 1,
+              "unit": "UNIT_KILOGRAM"
+            },
+            {
+              "name": "viande de boeuf",
+              "quantity": 300,
+              "unit": "UNIT_GRAM"
+            },
+            {
+              "name": "oignons",
+              "quantity": 3,
+              "unit": "UNIT_OBJECT"
+            },
+            {
+              "name": "ail",
+              "quantity": 1,
+              "unit": "UNIT_POD"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
