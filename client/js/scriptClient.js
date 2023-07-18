@@ -62,23 +62,73 @@ function showModalCreateRecipes() {
 }
 
 /**
- * listener sur le button ajout d'ingredient de la modal creation de recette
+ * listener sur le button ajout d'ingredient de la modal creation de recette et sur le bouton enregistré
  */
 document.getElementById('btn-add-ingredient').addEventListener('click', addInputIngredient);
-
+document.getElementById('btn-record-edit').addEventListener('click',recordRecipe);
 /**
  * Function déclencher par le listener sur le button ajout d'ingredient
  */function addInputIngredient() {
     const divCreateRecipesModal = document.getElementById('bloc-ingredient');
-    const divCreateRecipesModalInput = createMarkup('div', '', divCreateRecipesModal, [{ class: "d-flex flex-row" }]);
+    const divCreateRecipesModalInput = createMarkup('div', '', divCreateRecipesModal, [{ class: "d-flex flex-row value-ingredient-create" }]);
     createMarkup('input', '', divCreateRecipesModalInput, [{ class: "form-control my-1 mx-1 ", placeholder: "ingredient" }]);
     createMarkup('input', '', divCreateRecipesModalInput, [{ class: "my-1 mx-1", type: 'number' }]);
     const selectCreateRecipes = createMarkup('select', 'Choisir une uniter', divCreateRecipesModalInput, [{ class: "unit-select unit form-select my-1 mx-1" }]);
     fillSelectUnitCreateRecipesNew(arrayDataRecipes);
 }
 
+async function recordRecipe(){
+    //recup donéé de la modal 
+    const title = document.getElementById('title').value;
+    const gastronomy = document.getElementById('gastronomy').value;
+    console.log(`title et gastronomy`,title,gastronomy);
+    const tabValueIngredient = document.getElementsByClassName('value-ingredient-create');
+    const tab = Array.from(tabValueIngredient);
+   
+    console.log(`tab`,tab);
+    if (tabValueIngredient.length > 0) {
+        //faire boucle pour recup les trois enfant de la div avec leur value 
+       let tabIngredient = [];
+        tab.forEach(d => {
+            let element = d.children;
+            let ingredientName =    element.item(0).value;
+            let quantity = element.item(1).value;
+            let unit = element.item(2).value;
+            let obj = {
+                name : ingredientName ,
+                quantity: quantity,
+                unit: reverseConvertUnit(unit)
+            }
+            tabIngredient.push(obj);
+            console.log(`103 objet`,obj);
+            console.log(`104 element`,ingredientName);
+            
+        })
+        console.log(` 107 tableau `,tabIngredient);
+        try {
+            //construction du body de request
+            const bodyRequest = {
+                title: title,
+                ingredients: tabIngredient
+            }
+            console.log(`117 requestBody`, bodyRequest);
+            
+            const response = await fetch(`${endPoint}/recipes?gastronomy=${gastronomy}`, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                body: JSON.stringify(bodyRequest)
+            })
+            getAllRecipes();
 
-
+        } catch (error) {
+            console.error('error', error);
+        }
+    }
+} 
+ 
 
 if (document.location.href.toString().includes("client")) {
     console.log(" ligne 73",);
@@ -449,6 +499,40 @@ function convertUnit(unit) {
     }
 }
 
+function reverseConvertUnit(unit) {
+    switch (unit) {
+        case "gramme":
+            return "UNIT_GRAM";
+        case "kilogrammes":
+            return "UNIT_KILOGRAM";
+        case "objet":
+            return "UNIT_OBJECT";
+        case "sachet":
+            return "UNIT_PACK";
+        case "tranche":
+            return "UNIT_SLICE";
+        case "millilitre":
+            return "UNIT_MILLILITERS";
+        case "litre":
+            return "UNIT_LITER";
+        case "cuillère à soupe":
+            return "UNIT_TABLESPOON";
+        case "cuillère à café":
+            return "UNIT_TEASPOON";
+        case "cube":
+            return "UNIT_CUBE";
+        case "gousse":
+            return "UNIT_POD";
+        case "pincée":
+            return "UNIT_PINCH";
+        case "quantité selon le goût du cuisinier":
+            return "UNIT_PM";
+        default:
+            return unit;
+    }
+}
+
+
 /**
  * Reset de la modal avant appel pour la creation de recette 
 */
@@ -478,5 +562,3 @@ function resetCreateRecipeModal() {
     quantityInputs.forEach(input => input.value = ""); // Réinitialiser également les champs de quantité
     unitSelects.forEach(select => select.selectedIndex = 0);
 }
-
-
