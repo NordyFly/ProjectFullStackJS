@@ -4,14 +4,15 @@
   "description": "",
   "main": "bin/www",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node bin/www",
-    "dev": "cross-env NODE_ENV=development nodemon bin/www"
+    "start": "cross-env NODE_ENV=production node serveur/bin/www",
+    "dev": "cross-env NODE_ENV=development nodemon serveur/bin/www"
   },
   "keywords": [],
-  "author": "Cornillon Michael <contact@dwaps.fr> (https://dwaps.fr/)",
+  "author": "Dahamna Sofiane <dahamnasofiane@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "crypto": "^1.0.1",
     "express": "^4.18.2"
