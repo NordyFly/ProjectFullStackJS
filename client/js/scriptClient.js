@@ -219,80 +219,71 @@ function fillSelectAllRecipes(dataRecipes) {
 
 
 
-/**
- * Création des cards avec les recettes avec conversion des uniter
- */
+// Essaye ce code by Noureddine
 function createRecipesCard(dataRecipes) {
-    const sctnRecipes = document.getElementById('section-card-recipes');
-    let htmlContent = "";
-    dataRecipes.forEach(recipe => {
-      let ingredientsHtml = "";
-      recipe.ingredients.forEach(ingredient => {
-        const convertedUnit = convertUnit(ingredient.unit);
-        ingredientsHtml += `<li class="list-group-item my-2 rounded border border-black">${ingredient.name} : ${ingredient.quantity} ${convertedUnit}</li>`;
-      });
-      htmlContent += `<div class="card mx-2 my-2" style="width: 18rem;">
-        <div class="card-body">
-          <h4 class="card-title" >Pays : ${recipe.gastronomy}</h4>
-          <h5 class="card-title">${recipe.title}</h5>
-          <ul class="list-group">${ingredientsHtml}</ul>
-          <button id="${recipe.id}" class="btn btn-success edit-recipes">Editer</button>
-          <button id="${recipe.id}" class="btn btn-danger suppr">Supprimer</button>
-        </div>
-      </div>`;
+  const sctnRecipes = document.getElementById('section-card-recipes');
+  let htmlContent = "";
+  dataRecipes.forEach((recipe, index) => { // Parcours de chaque recette dans les données
+    let ingredientsHtml = "";
+    recipe.ingredients.forEach(ingredient => { // Parcours de chaque ingrédient dans la recette
+      const convertedUnit = convertUnit(ingredient.unit); // Conversion de l'unité de mesure
+      // Création des éléments HTML pour chaque ingrédient, y compris un champ de texte caché pour l'édition
+      ingredientsHtml += `
+        <li class="list-group-item my-2 rounded border border-black">
+          <span class="ingredient-name">${ingredient.name}</span> : 
+          <span class="ingredient-quantity">${ingredient.quantity}</span>
+          <span class="ingredient-unit">${convertedUnit}</span>
+          <input type="text" class="ingredient-input" value="${ingredient.quantity}" style="display: none;">
+        </li>`;
     });
-    sctnRecipes.innerHTML = htmlContent;
-  }
+    // Création de la carte de recette avec l'index comme identifiant unique
+    htmlContent += `<div class="card mx-2 my-2" id="card${index}" style="width: 18rem;">
+      <div class="card-body">
+        <h4 class="card-title" >Pays : ${recipe.gastronomy}</h4>
+        <h5 class="card-title">${recipe.title}</h5>
+        <ul class="list-group recipe-ingredients">${ingredientsHtml}</ul>
+        <button id="edit-${index}" class="btn btn-success edit-recipes">Editer</button>
+        <button id="delete-${index}" class="btn btn-danger suppr">Supprimer</button>
+      </div>
+    </div>`;
+  });
+  sctnRecipes.innerHTML = htmlContent; // Ajout du contenu HTML des cartes de recette dans la section 'section-card-recipes'
 
+  const btnEditCards = document.getElementsByClassName('edit-recipes'); // Sélection de tous les boutons d'édition
 
-/**
- * 
- * Fonction a appeler avec un listener dans le code de creation des card 
- */
-  // Fonction pour éditer une "card" de recette
-  function editRecipeCard(cardId) {
-    // Récupérer l'élément de la "card" de recette à éditer
-    let recipeCard = document.getElementById(cardId);
-  
-    // Récupérer les éléments des ingrédients et des quantités
-    let ingredientsElement = recipeCard.querySelector(".recipe-ingredients");
-    let quantitiesElement = recipeCard.querySelector(".recipe-quantities");
-  
-    // Créer des champs de texte pour les ingrédients et les quantités
-    let ingredientsInput = document.createElement("textarea");
-    ingredientsInput.value = ingredientsElement.textContent;
-    recipeCard.replaceChild(ingredientsInput, ingredientsElement);
-  
-    let quantitiesInput = document.createElement("textarea");
-    quantitiesInput.value = quantitiesElement.textContent;
-    recipeCard.replaceChild(quantitiesInput, quantitiesElement);
-  
-    // Créer un bouton de soumission pour sauvegarder les modifications
-    let saveButton = document.createElement("button");
-    saveButton.textContent = "Enregistrer";
-    saveButton.addEventListener("click", function() {
-      // Mettre à jour les éléments des ingrédients et des quantités avec les valeurs des champs de texte
-      ingredientsElement.textContent = ingredientsInput.value;
-      quantitiesElement.textContent = quantitiesInput.value;
-  
-      // Supprimer les champs de texte et réafficher les éléments de la "card" de recette
-      recipeCard.replaceChild(ingredientsElement, ingredientsInput);
-      recipeCard.replaceChild(quantitiesElement, quantitiesInput);
+  for (let i = 0; i < btnEditCards.length; i++) { // Parcours de chaque bouton d'édition
+    btnEditCards[i].addEventListener('click', (event) => { // Ajout d'un écouteur d'événement au clic sur le bouton d'édition
+      const card = event.target.closest('.card'); // Récupération de la carte parente du bouton
+      if (card) {
+        toggleEditInputs(card); // Appel de la fonction pour basculer entre l'affichage et l'édition des ingrédients
+      }
     });
-  
-    // Ajouter le bouton de sauvegarde à la "card" de recette
-    recipeCard.appendChild(saveButton);
   }
-  
-  const btnEditCard = document.getElementsByClassName('edit-recipes');
-  console.log(btnEditCard);
-  
-  Array.from(btnEditCard).forEach(b => b.addEventListener('click', (event) => {
-    const card = event.target.closest('.recipe-card');
-    if (card) {
-      editRecipeCard(card.id);
+}
+
+function toggleEditInputs(card) {
+  const ingredientElements = card.querySelectorAll(".list-group-item"); // Sélection de tous les éléments d'ingrédients
+  ingredientElements.forEach(ingredientElement => { // Parcours de chaque élément d'ingrédient
+    const quantityElement = ingredientElement.querySelector(".ingredient-quantity"); // Sélection de l'élément de quantité
+    const inputElement = ingredientElement.querySelector(".ingredient-input"); // Sélection de l'élément de champ de texte
+    const editButton = card.querySelector(".edit-recipes"); // Sélection du bouton d'édition
+
+    if (inputElement.style.display === "none") { // Si le champ de texte est caché, on le rend visible pour l'édition
+      inputElement.style.display = "inline-block";
+      quantityElement.style.display = "none";
+      editButton.textContent = "Enregistrer"; // Changement du texte du bouton pour indiquer que l'édition est en cours
+    } else { // Si le champ de texte est visible, on le cache et enregistre la nouvelle valeur
+      inputElement.style.display = "none";
+      quantityElement.style.display = "inline-block";
+      editButton.textContent = "Editer"; // Changement du texte du bouton pour indiquer que l'on peut éditer
+      quantityElement.textContent = inputElement.value; // Enregistrement de la nouvelle valeur dans l'élément span de quantité
     }
-  }));
+  });
+}
+
+
+
+
 
 
 
