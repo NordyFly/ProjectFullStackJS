@@ -292,6 +292,7 @@ function createRecipesCard(dataRecipes) {
 }
 function showEditModal(recipe) {
     // Récupérer la modal d'édition depuis le DOM
+    console.log(`295 recipe`,recipe);
     const modal = document.getElementById('myModal');
   
     const modalTitle = modal.querySelector('.modal-title');
@@ -308,13 +309,12 @@ function showEditModal(recipe) {
     gastronomyInput.value = recipe.gastronomy;
   
     // Pré-remplir les champs d'ingrédients avec les valeurs de la recette
-    if (Array.isArray(recipe.ingredients)) {
-        recipe.ingredients.forEach((ingredient, index) => {
+    if (recipe.ingredients.length > 0) {
+        console.log(`312 recipes.ingredient `,recipe.ingredients);
+       Array.from(recipe.ingredients).forEach((ingredient, index) => {
           if (ingredientInputs[index]) {
             ingredientInputs[index].value = ingredient.name;
-          }
-          if (quantityInputs[index]) {
-            quantityInputs[index].value = ingredient.quantity;
+            console.log(`317`,ingredientInputs[index]);
           }
           if (unitSelects[index]) {
             // Pré-sélectionner l'option correspondant à l'unité de l'ingrédient
@@ -330,6 +330,8 @@ function showEditModal(recipe) {
     // Afficher la modal
     const bootstrapModal = new bootstrap.Modal(modal);
     bootstrapModal.show();
+    //const btnRecordEdit = document.getElementById('btn-record-edit');
+    //btnRecordEdit.addEventListener('click', );
   }
   
   
