@@ -124,6 +124,7 @@ exports.updateRecipesCtrl = (req, res) => {
     const recipesAll = getAllRecipesFromJsonDb(jsonData);
     const updatedRecipe = recipesAll.find((r) => r.id === id);
     res.json(updatedRecipe);
+
   } catch (e) {
     if (e.name === "ValidationError") {
       res.status(400).json({

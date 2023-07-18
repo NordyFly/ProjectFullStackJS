@@ -237,7 +237,7 @@ function createRecipesCard(dataRecipes) {
         </li>`;
     });
     // Création de la carte de recette avec l'index comme identifiant unique
-    htmlContent += `<div class="card mx-2 my-2" id="card${index}" style="width: 18rem;">
+    htmlContent += `<div class="card mx-2 my-2" id="card${recipe.id}" style="width: 18rem;">
       <div class="card-body">
         <h4 class="card-title" >Pays : ${recipe.gastronomy}</h4>
         <h5 class="card-title">${recipe.title}</h5>
@@ -251,41 +251,75 @@ function createRecipesCard(dataRecipes) {
 
   const btnEditCards = document.getElementsByClassName('edit-recipes'); // Sélection de tous les boutons d'édition
 
-  for (let i = 0; i < btnEditCards.length; i++) { // Parcours de chaque bouton d'édition
-    btnEditCards[i].addEventListener('click', (event) => { // Ajout d'un écouteur d'événement au clic sur le bouton d'édition
-      const card = event.target.closest('.card'); // Récupération de la carte parente du bouton
+  for (let i = 0; i < btnEditCards.length; i++) {
+    btnEditCards[i].addEventListener('click', (event) => {
+      const card = event.target.closest('.card');
       if (card) {
-        toggleEditInputs(card); // Appel de la fonction pour basculer entre l'affichage et l'édition des ingrédients
+        toggleEditInputs(card, dataRecipes); // Passer la variable dataRecipes en tant que paramètre
       }
     });
   }
+  
 }
 
-function toggleEditInputs(card) {
-  const ingredientElements = card.querySelectorAll(".list-group-item"); // Sélection de tous les éléments d'ingrédients
-  ingredientElements.forEach(ingredientElement => { // Parcours de chaque élément d'ingrédient
-    const quantityElement = ingredientElement.querySelector(".ingredient-quantity"); // Sélection de l'élément de quantité
-    const inputElement = ingredientElement.querySelector(".ingredient-input"); // Sélection de l'élément de champ de texte
-    const editButton = card.querySelector(".edit-recipes"); // Sélection du bouton d'édition
+function toggleEditInputs(card, dataRecipes) {
+  const ingredientElements = card.querySelectorAll(".list-group-item");
+  const recipeId = card.id.substring(4); 
+  console.log(recipeId);
+  
+  ingredientElements.forEach(ingredientElement => {
+    const quantityElement = ingredientElement.querySelector(".ingredient-quantity");
+    const inputElement = ingredientElement.querySelector(".ingredient-input");
+    const editButton = card.querySelector(".edit-recipes");
 
-    if (inputElement.style.display === "none") { // Si le champ de texte est caché, on le rend visible pour l'édition
-      inputElement.style.display = "inline-block";
-      quantityElement.style.display = "none";
-      editButton.textContent = "Enregistrer"; // Changement du texte du bouton pour indiquer que l'édition est en cours
-    } else { // Si le champ de texte est visible, on le cache et enregistre la nouvelle valeur
-      inputElement.style.display = "none";
-      quantityElement.style.display = "inline-block";
-      editButton.textContent = "Editer"; // Changement du texte du bouton pour indiquer que l'on peut éditer
-      quantityElement.textContent = inputElement.value; // Enregistrement de la nouvelle valeur dans l'élément span de quantité
+    if (inputElement) {
+      if (inputElement.style.display === "none") {
+        inputElement.style.display = "inline-block";
+        quantityElement.style.display = "none";
+        editButton.textContent = "Enregistrer";
+      } else {
+        inputElement.style.display = "none";
+        quantityElement.style.display = "inline-block";
+        editButton.textContent = "Editer";
+        quantityElement.textContent = inputElement.value;
+        
+        // La requête PATCH pour maj la recette sur le serveur
+        const ingredientName = ingredientElement.querySelector(".ingredient-name").textContent;
+        const convertedUnit = ingredientElement.querySelector(".ingredient-unit").textContent;
+        const newQuantity = inputElement.value;
+
+        fetch(`/recipes/${recipeId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+          },
+          body: JSON.stringify({
+            ingredientName,
+            convertedUnit,
+            newQuantity,
+          }),
+        })
+        .then(response => response.json())
+        .then(updatedRecipe => {
+          // Mettre à jour l'objet 'dataRecipes' côté client avec les nouvelles données reçues du serveur
+          const index = dataRecipes.findIndex(recipe => recipe.id === recipeId);
+          dataRecipes[index].ingredients.forEach(ingredient => {
+            if (ingredient.name === ingredientName) {
+              ingredient.quantity = newQuantity;
+              ingredient.unit = convertedUnit;
+            }
+          });
+        })
+        .catch(error => {
+          console.error("Erreur lors de la mise à jour sur le serveur :", error);
+        });
+      }
+    } else {
+      console.log("Erreur : champ de texte introuvable dans l'élément d'ingrédient.");
     }
   });
 }
-
-
-
-
-
-
 
 
 
