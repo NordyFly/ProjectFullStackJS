@@ -11,6 +11,7 @@ const container = createMarkup('div', '', document.body, [{ class: "container" }
 const sctnTitle = createMarkup('section', '', container, [{ class: "row" }]);
 const sctnSelect = createMarkup('section', '', container, [{ class: "d-flex flex-row justify-content-around my-5" }]);
 const sctnRecipes = createMarkup('section', '', container, [{ class: "row", id: 'section-card-recipes' }]);
+const recipeCardsContainer = document.getElementById('section-card-recipes'); // Élément parent statique
 
 /**
  * Insertion du Titre
@@ -276,99 +277,178 @@ function fillSelectAllRecipes(dataRecipes) {
 
 
 // Essaye ce code by Noureddine
+
 function createRecipesCard(dataRecipes) {
-    const sctnRecipes = document.getElementById('section-card-recipes');
-    let htmlContent = "";
-    dataRecipes.forEach((recipe, index) => { // Parcours de chaque recette dans les données
-        let ingredientsHtml = "";
-        recipe.ingredients.forEach(ingredient => { // Parcours de chaque ingrédient dans la recette
-            const convertedUnit = convertUnit(ingredient.unit); // Conversion de l'unité de mesure
-            // Création des éléments HTML pour chaque ingrédient, y compris un champ de texte caché pour l'édition
-            ingredientsHtml += `
-        <li class="list-group-item my-2 rounded border border-black">
-          <span class="ingredient-name">${ingredient.name}</span> : 
-          <span class="ingredient-quantity">${ingredient.quantity}</span>
-          <span class="ingredient-unit">${convertedUnit}</span>
-          <input type="text" class="ingredient-input" value="${ingredient.quantity}" style="display: none;">
-        </li>`;
-        });
-        // Création de la carte de recette avec l'index comme identifiant unique
-        htmlContent += `<div class="card mx-2 my-2" id="${recipe.id}" style="width: 18rem;">
+  const sctnRecipes = document.getElementById('section-card-recipes');
+  let htmlContent = "";
+  dataRecipes.forEach((recipe, index) => { // Parcours de chaque recette dans les données
+    let ingredientsHtml = "";
+    recipe.ingredients.forEach(ingredient => { // Parcours de chaque ingrédient dans la recette
+      const convertedUnit = convertUnit(ingredient.unit); // Conversion de l'unité de mesure
+      // Création des éléments HTML pour chaque ingrédient, y compris un champ de texte caché pour l'édition
+      ingredientsHtml += `
+      <li class="list-group-item my-2 rounded border border-black">
+        <span class="ingredient-name">${ingredient.name}</span> : 
+        <span class="ingredient-quantity">${ingredient.quantity}</span>
+        <span class="ingredient-unit">${convertedUnit}</span>
+        <input type="text" class="ingredient-input" value="${ingredient.quantity}" style="display: none;">
+      </li>`;
+    });
+    // Création de la carte de recette avec l'index comme identifiant unique
+    htmlContent += `<div class="card mx-2 my-2" id="${recipe.id}" style="width: 18rem;">
       <div class="card-body">
-        <h4 class="card-title" >Pays : ${recipe.gastronomy}</h4>
+        <h4 class="card-title">Pays : ${recipe.gastronomy}</h4>
         <h5 class="card-title">${recipe.title}</h5>
         <ul class="list-group recipe-ingredients">${ingredientsHtml}</ul>
         <button id="edit-${index}" class="btn btn-success edit-recipes">Editer</button>
         <button id="delete-${index} " class="btn btn-danger suppr">Supprimer</button>
       </div>
     </div>`;
+  });
+  sctnRecipes.innerHTML = htmlContent; // Ajout du contenu HTML des cartes de recette dans la section 'section-card-recipes'
+
+  const btnEditCards = document.getElementsByClassName('edit-recipes'); // Sélection de tous les boutons d'édition
+  const btnSupprCard = document.getElementsByClassName('suppr'); // Sélection de tous les boutons suppresion
+
+  for (let i = 0; i < btnEditCards.length; i++) { // Parcours de chaque bouton d'édition
+    btnEditCards[i].addEventListener('click', (event) => { // Ajout d'un écouteur d'événement au clic sur le bouton d'édition
+      const card = event.target.closest('.card'); // Récupération de la carte parente du bouton
+      if (card) {
+        toggleEditInputs(card); // Appel de la fonction pour basculer entre l'affichage et l'édition des ingrédients
+      }
     });
-    sctnRecipes.innerHTML = htmlContent; // Ajout du contenu HTML des cartes de recette dans la section 'section-card-recipes'
-
-    const btnEditCards = document.getElementsByClassName('edit-recipes'); // Sélection de tous les boutons d'édition
-    const btnSupprCard = document.getElementsByClassName('suppr'); // Sélection de tous les boutons suppresion
-
-    for (let i = 0; i < btnEditCards.length; i++) { // Parcours de chaque bouton d'édition
-        btnEditCards[i].addEventListener('click', (event) => { // Ajout d'un écouteur d'événement au clic sur le bouton d'édition
-            const card = event.target.closest('.card'); // Récupération de la carte parente du bouton
-            if (card) {
-                toggleEditInputs(card); // Appel de la fonction pour basculer entre l'affichage et l'édition des ingrédients
-            }
-        });
-    }
-    for (let i = 0; i < btnSupprCard.length; i++) { // Parcours de chaque bouton d'édition
-        btnSupprCard[i].addEventListener('click', (event) => { // Ajout d'un écouteur d'événement au clic sur le bouton d'édition
-            const card = event.target.closest('.card'); // Récupération de la carte parente du bouton
-            if (card) {
-               let recipeId = card.id;
-               console.log(`276`, recipeId);
-               deleteRecipes(recipeId);
-            }
-        });
-    }
+  }
+  for (let i = 0; i < btnSupprCard.length; i++) { // Parcours de chaque bouton d'édition
+    btnSupprCard[i].addEventListener('click', (event) => { // Ajout d'un écouteur d'événement au clic sur le bouton d'édition
+      const card = event.target.closest('.card'); // Récupération de la carte parente du bouton
+      if (card) {
+        let recipeId = card.id;
+        console.log(`276`, recipeId);
+        deleteRecipes(recipeId);
+      }
+    });
+  }
 }
 
+
 async function deleteRecipes(recipeId) {
-    try {
-        console.log(`284`, recipeId);
-        const response = await fetch(`${endPoint}/recipes/${recipeId}`, {
-            method: 'delete',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            }
-        });
+  try {
+    console.log(`Recipe ID to delete:`, recipeId);
+    const response = await fetch(`${endPoint}/recipes/${recipeId}`, {
+      method: 'delete',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      }
+    });
 
-        const deletedId = await response.json(); 
-        console.log("ligne 183", deletedId);
-        getAllRecipes();
-       
-
-    } catch (error) {
-        console.error(`erreur`, error);
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Erreur lors de la suppression :", errorData);
+      return;
     }
+
+    const deletedData = await response.json();
+    console.log("Recipe successfully deleted:", deletedData);
+    getAllRecipes();
+  } catch (error) {
+    console.error(`erreur`, error);
+  }
+}
+
+function updateCardData(recipeId, updatedRecipe) {
+  const recipeCard = document.getElementById(recipeId);
+  if (!recipeCard) {
+    console.error(`La carte de recette avec l'ID ${recipeId} n'a pas été trouvée.`);
+    return;
+  }
+
+  const titleElement = recipeCard.querySelector('.card-title');
+  const gastronomyElement = recipeCard.querySelector('.card-gastronomy');
+  const ingredientElements = recipeCard.querySelectorAll('.list-group-item');
+
+  titleElement.textContent = updatedRecipe.title;
+  gastronomyElement.textContent = `Pays : ${updatedRecipe.gastronomy}`;
+
+  updatedRecipe.ingredients.forEach((updatedIngredient, index) => {
+    const ingredientElement = ingredientElements[index];
+    if (ingredientElement) {
+      const nameElement = ingredientElement.querySelector('.ingredient-name');
+      const quantityElement = ingredientElement.querySelector('.ingredient-quantity');
+      const unitElement = ingredientElement.querySelector('.ingredient-unit');
+
+      nameElement.textContent = updatedIngredient.name;
+      quantityElement.textContent = updatedIngredient.quantity;
+      unitElement.textContent = convertUnit(updatedIngredient.unit);
+    }
+  });
+}
+
+async function saveRecipeOnServer(recipeId, updatedRecipe) {
+  try {
+    const response = await fetch(`${endPoint}/recipes/${recipeId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify(updatedRecipe)
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Erreur lors de la mise à jour :", errorData);
+      return;
+    }
+
+    const updatedData = await response.json();
+    console.log("Mise à jour réussie :", updatedData);
+    updateCardData(recipeId, updatedData);
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour :", error);
+  }
 }
 
 
 function toggleEditInputs(card) {
-    const ingredientElements = card.querySelectorAll(".list-group-item"); // Sélection de tous les éléments d'ingrédients
-    ingredientElements.forEach(ingredientElement => { // Parcours de chaque élément d'ingrédient
-        const quantityElement = ingredientElement.querySelector(".ingredient-quantity"); // Sélection de l'élément de quantité
-        const inputElement = ingredientElement.querySelector(".ingredient-input"); // Sélection de l'élément de champ de texte
-        const editButton = card.querySelector(".edit-recipes"); // Sélection du bouton d'édition
+  const ingredientElements = card.querySelectorAll(".list-group-item");
+  const titleElement = card.querySelector(".card-title");
+  ingredientElements.forEach(ingredientElement => {
+    const nameElement = ingredientElement.querySelector(".ingredient-name");
+    const quantityElement = ingredientElement.querySelector(".ingredient-quantity");
+    const unitElement = ingredientElement.querySelector(".ingredient-unit");
+    const inputElement = ingredientElement.querySelector(".ingredient-input");
+    const editButton = card.querySelector(".edit-recipes");
 
-        if (inputElement.style.display === "none") { // Si le champ de texte est caché, on le rend visible pour l'édition
-            inputElement.style.display = "inline-block";
-            quantityElement.style.display = "none";
-            editButton.textContent = "Enregistrer"; // Changement du texte du bouton pour indiquer que l'édition est en cours
-        } else { // Si le champ de texte est visible, on le cache et enregistre la nouvelle valeur
-            inputElement.style.display = "none";
-            quantityElement.style.display = "inline-block";
-            editButton.textContent = "Editer"; // Changement du texte du bouton pour indiquer que l'on peut éditer
-            quantityElement.textContent = inputElement.value; // Enregistrement de la nouvelle valeur dans l'élément span de quantité
-        }
-    });
+    if (inputElement.style.display === "none") {
+      inputElement.style.display = "inline-block";
+      quantityElement.style.display = "none";
+      editButton.textContent = "Enregistrer";
+    } else {
+      inputElement.style.display = "none";
+      quantityElement.style.display = "inline-block";
+      editButton.textContent = "Editer";
+      quantityElement.textContent = inputElement.value;
+
+      // Récupérer les données mises à jour
+      const updatedData = {
+        title: titleElement.textContent.trim(),
+        ingredients: Array.from(ingredientElements).map(element => {
+          return {
+            name: element.querySelector(".ingredient-name").textContent.trim(),
+            quantity: element.querySelector(".ingredient-input").value.trim(),
+            unit: element.querySelector(".ingredient-unit").textContent.trim()
+          };
+        })
+      };
+
+      const recipeId = card.id;
+      saveRecipeOnServer(recipeId, updatedData);
+    }
+  });
 }
+
+
 
 
 /**
