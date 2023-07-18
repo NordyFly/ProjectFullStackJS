@@ -46,14 +46,13 @@ document.getElementById('btnCreateRecipes').addEventListener('click', showModalC
 /**
  * Function déclencher par le listener sur le button creation recette
  */
+
 function showModalCreateRecipes() {
-    resetCreateRecipeModal();
+    //resetCreateRecipeModal();
 
     
 
     const modal = document.getElementById('myModal');
-    const modalTitle = modal.querySelector('.modal-title');
-    modalTitle.textContent = "creation de recette";
     const bootstrapModal = new bootstrap.Modal(modal);
     bootstrapModal.show();
 
@@ -69,16 +68,12 @@ document.getElementById('btn-add-ingredient').addEventListener('click', addInput
 
 /**
  * Function déclencher par le listener sur le button ajout d'ingredient
- */
-function addInputIngredient() {
+ */function addInputIngredient() {
     const divCreateRecipesModal = document.getElementById('bloc-ingredient');
     const divCreateRecipesModalInput = createMarkup('div', '', divCreateRecipesModal, [{ class: "d-flex flex-row" }]);
-    createMarkup('input', '', divCreateRecipesModalInput, [{ class: "form-control my-1 mx-1 ingredient-input", placeholder: "ingredient" }]);
+    createMarkup('input', '', divCreateRecipesModalInput, [{ class: "form-control my-1 mx-1 ", placeholder: "ingredient" }]);
     createMarkup('input', '', divCreateRecipesModalInput, [{ class: "my-1 mx-1", type: 'number' }]);
     const selectCreateRecipes = createMarkup('select', 'Choisir une uniter', divCreateRecipesModalInput, [{ class: "unit-select unit form-select my-1 mx-1" }]);
-    const ingredientInputs = document.querySelectorAll('.modal-body input.ingredient-input');
-    const quantityInputs = document.querySelectorAll('.modal-body input.quantity-input');
-    const unitSelects = document.querySelectorAll('.modal-body select.unit-select');
     fillSelectUnitCreateRecipesNew(arrayDataRecipes);
   }
   
@@ -131,7 +126,7 @@ async function getAllRecipes() {
  selectPerIngredient.addEventListener('change', (event) => {
    console.log(`119`);
     let selectedIngredient = event.target.value;
-    let filteredRecipes = arrayDataRecipes.filter(arrayDataRecipes => arrayDataRecipes.ingredients.includes(selectedIngredient));
+    let filteredRecipes = arrayDataRecipes
     getRecipesByIngredientName(selectedIngredient);
     createRecipesCard(filteredRecipes); // Appeler la fonction avec le tableau filtré
     if (selectedIngredient == 'empty') {
@@ -227,137 +222,6 @@ function fillSelectAllRecipes(dataRecipes) {
 }
 
 
-
-/**
- * Création des cards avec les recettes avec conversion des uniter
- 
-function createRecipesCard(dataRecipes) {
-    const sctnRecipes = document.getElementById('section-card-recipes');
-    let htmlContent = "";
-    dataRecipes.forEach(recipe => {
-      let ingredientsHtml = "";
-      recipe.ingredients.forEach(ingredient => {
-        const convertedUnit = convertUnit(ingredient.unit);
-        ingredientsHtml += `<li class="list-group-item my-2 rounded border border-black">${ingredient.name} : ${ingredient.quantity} ${convertedUnit}</li>`;
-      });
-      htmlContent += `<div class="card mx-2 my-2" style="width: 18rem;">
-        <div class="card-body">
-          <h4 class="gas" >Pays : ${recipe.gastronomy}</h4>
-          <h5 class="card-title title">${recipe.title}</h5>
-          <ul class="list-group">${ingredientsHtml}</ul>
-          <button id="${recipe.id}" class="btn btn-success edit-recipes">Editer</button>
-          <button id="${recipe.id}" class="btn btn-danger suppr">Supprimer</button>
-        </div>
-      </div>`;
-    });
-    sctnRecipes.innerHTML = htmlContent;
-  }
-
-  recipeCardsContainer.addEventListener('click', (event) => {
-    if (event.target.classList.contains('edit-recipes')) {
-      let selectedCard = event.target.id;
-      console.log(`250`, selectedCard);
-      editRecipeCard(selectedCard);
-    }
-  });
-  
-  
-
-*/
-/** 
-/**
- * 
- * Fonction a appeler avec un listener dans le code de creation des card 
- function editRecipeCard(selectedCard) {
-    resetCreateRecipeModal();
- // Récupérer l'élément de la "card" de recette à éditer
- let editButton = document.getElementById(selectedCard);
- let recipeCard = editButton.closest('.card');
-
- // Récupérer l'élément de titre de la recette à l'intérieur de la carte
- let recipeTitle = recipeCard.querySelector('.card-title').textContent;
-
-  let recipeIngredients = recipeCard.querySelector('.list-group').textContent;
- 
-  let recipesGastronomy = recipeCard.querySelector('.gas').textContent;
-
-  // Créer un objet recette avec les informations récupérées
-  let recipe = {
-    title: recipeTitle,
-    ingredients: recipeIngredients,
-    gastronomy: recipesGastronomy
-  };
-
-  // Appeler la fonction pour afficher la modal d'édition avec les éléments de la recette
-  showEditModal(recipe);
-}
-function showEditModal(recipe) {
-    // Récupérer la modal d'édition depuis le DOM
-    console.log(`295 recipe`,recipe);
-    const modal = document.getElementById('myModal');
- 
-  // Fonction pour éditer une "card" de recette
-  function editRecipeCard(cardId) {
-    // Récupérer l'élément de la "card" de recette à éditer
-    let recipeCard = document.getElementById(cardId);
-  
-    const modalTitle = modal.querySelector('.modal-title');
-    modalTitle.textContent = "Modification de recette";
-
-    // Récupérer les éléments de la modal
-    const recipeNameInput = modal.querySelector('.modal-body input[placeholder="Nom de votre recette"]');
-    const gastronomyInput = modal.querySelector('.modal-body input[placeholder="Gastronomie"]');
-    const ingredientInputs = modal.querySelectorAll('.modal-body input[placeholder="ingredient"]');
-    const unitSelects = modal.querySelectorAll('.modal-body select');
-  
-    const modalTitle = modal.querySelector('.modal-title');
-    modalTitle.textContent = "Modification de recette";
-
-    // Récupérer les éléments de la modal
-    const recipeNameInput = modal.querySelector('.modal-body input[placeholder="Nom de votre recette"]');
-    const gastronomyInput = modal.querySelector('.modal-body input[placeholder="Gastronomie"]');
-    const ingredientInputs = modal.querySelectorAll('.modal-body input[placeholder="ingredient"]');
-    const unitSelects = modal.querySelectorAll('.modal-body select');
-  
-    // Pré-remplir les champs de la modal avec les valeurs de la recette
-    recipeNameInput.value = recipe.title;
-    gastronomyInput.value = recipe.gastronomy;
-  
-    // Pré-remplir les champs d'ingrédients avec les valeurs de la recette
-    if (recipe.ingredients.length > 0) {
-        console.log(`312 recipes.ingredient `,recipe.ingredients);
-       Array.from(recipe.ingredients).forEach((ingredient, index) => {
-          if (ingredientInputs[index]) {
-            ingredientInputs[index].value = ingredient.name;
-            console.log(`317`,ingredientInputs[index]);
-          }
-          if (unitSelects[index]) {
-            // Pré-sélectionner l'option correspondant à l'unité de l'ingrédient
-            const option = unitSelects[index].querySelector(`option[value="${ingredient.unit}"]`);
-            if (option) {
-              option.selected = true;
-            }
-          }
-        });
-      }
-      
-  
-    // Afficher la modal
-    const bootstrapModal = new bootstrap.Modal(modal);
-    bootstrapModal.show();
-    //const btnRecordEdit = document.getElementById('btn-record-edit');
-    //btnRecordEdit.addEventListener('click', );
-  }
-  
-  
-  Array.from(btnEditCard).forEach(b => b.addEventListener('click', (event) => {
-    const card = event.target.closest('.recipe-card');
-    if (card) {
-      editRecipeCard(card.id);
-    }
-  }));
-*/
-
 // Essaye ce code by Noureddine
 function createRecipesCard(dataRecipes) {
   const sctnRecipes = document.getElementById('section-card-recipes');
@@ -419,20 +283,6 @@ function toggleEditInputs(card) {
     }
   });
 }
-
-
-
-
-
-
-
-
-
-
-
-  
-  
- 
 
 
 /**
@@ -569,7 +419,7 @@ function fillSelectUnitCreateRecipes(dataRecipes) {
   const modal = document.getElementById('myModal');
   const recipeNameInput = modal.querySelector('.modal-body input[placeholder="Nom de votre recette"]');
   const gastronomyInput = modal.querySelector('.modal-body input[placeholder="Gastronomie"]');
-  const ingredientInputs = modal.querySelectorAll('.modal-body input.ingredient-input');
+  const ingredientInputs = modal.querySelectorAll('.modal-body input');
   const quantityInputs = modal.querySelectorAll('.modal-body input[type="number"]');
   const unitSelects = modal.querySelectorAll('.modal-body select.unit-select');
 
@@ -577,7 +427,10 @@ function fillSelectUnitCreateRecipes(dataRecipes) {
   ingredientInputs.forEach((input, index) => {
     if (index > 0) {
       input.parentNode.remove();
-      quantityInputs[index].parentNode.remove(); // Supprimer également l'élément de quantité correspondant
+      if ( quantityInputs[index]) {
+        quantityInputs[index].parentNode.remove(); // Supprimer également l'élément de quantité correspondant
+      }
+      
     }
   });
 
