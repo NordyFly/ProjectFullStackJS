@@ -4,23 +4,6 @@
       "gastronomy": "France",
       "recipes": [
         {
-          "id": "97e9dad8-fe5a-454d-9797-ed85fecfcb09",
-          "title": "Raclette",
-          "ingredients": [
-            {
-              "name": "pomme de terre",
-              "quantity": "1",
-              "unit": "objet"
-            },
-            {
-              "name": "fromage à raclette",
-              "quantity": "30",
-              "unit": "gramme"
-            }
-          ],
-          "gastronomy": "France"
-        },
-        {
           "id": "a7f8c252-3704-4601-8cfa-a05c171eea72",
           "title": "Pizza",
           "ingredients": [
@@ -39,8 +22,7 @@
               "quantity": 1,
               "unit": "UNIT_OBJECT"
             }
-          ],
-          "gastronomy": "France"
+          ]
         },
         {
           "id": "4991076f-fda0-4413-a1d0-dc2f8310f26e",
@@ -61,8 +43,7 @@
               "quantity": 1,
               "unit": "UNIT_CUBE"
             }
-          ],
-          "gastronomy": "France"
+          ]
         },
         {
           "id": "ac89a1f3-0009-4ae6-8aa9-fc1612b9b544",
@@ -83,30 +64,7 @@
               "quantity": 1,
               "unit": "UNIT_PACK"
             }
-          ],
-          "gastronomy": "France"
-        },
-        {
-          "title": "couscous",
-          "ingredients": [
-            {
-              "name": "test",
-              "quantity": "1",
-              "unit": "objet"
-            },
-            {
-              "name": "test",
-              "quantity": "22",
-              "unit": "empty"
-            },
-            {
-              "name": "test",
-              "quantity": "1",
-              "unit": "kilogrammes"
-            }
-          ],
-          "id": "1c2e8419-36a1-48c1-a9cf-3ca9154a312d",
-          "gastronomy": "France"
+          ]
         }
       ]
     },
@@ -132,8 +90,7 @@
               "quantity": 1,
               "unit": "UNIT_CUBE"
             }
-          ],
-          "gastronomy": "Chine"
+          ]
         },
         {
           "id": "79a5b0f2-4a3d-4411-ba47-c099692aec97",
@@ -154,8 +111,7 @@
               "quantity": 1,
               "unit": "UNIT_PINCH"
             }
-          ],
-          "gastronomy": "Chine"
+          ]
         }
       ]
     },
@@ -181,8 +137,7 @@
               "quantity": 1,
               "unit": "UNIT_OBJECT"
             }
-          ],
-          "gastronomy": "Italie"
+          ]
         },
         {
           "id": "1f5b1824-8c81-4980-9fb7-71b6a5c4a6d1",
@@ -208,8 +163,7 @@
               "quantity": 1,
               "unit": "UNIT_POD"
             }
-          ],
-          "gastronomy": "Italie"
+          ]
         }
       ]
     }
