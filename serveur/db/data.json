@@ -22,7 +22,8 @@
               "quantity": 1,
               "unit": "UNIT_OBJECT"
             }
-          ]
+          ],
+          "gastronomy": "France"
         },
         {
           "id": "4991076f-fda0-4413-a1d0-dc2f8310f26e",
@@ -43,7 +44,8 @@
               "quantity": 1,
               "unit": "UNIT_CUBE"
             }
-          ]
+          ],
+          "gastronomy": "France"
         },
         {
           "id": "ac89a1f3-0009-4ae6-8aa9-fc1612b9b544",
@@ -64,7 +66,8 @@
               "quantity": 1,
               "unit": "UNIT_PACK"
             }
-          ]
+          ],
+          "gastronomy": "France"
         },
         {
           "title": "soupe de gilet jaune",
@@ -75,7 +78,35 @@
               "unit": "cube"
             }
           ],
-          "id": "c6f34865-a49a-456e-a620-c071b971c3a8"
+          "id": "c6f34865-a49a-456e-a620-c071b971c3a8",
+          "gastronomy": "France"
+        },
+        {
+          "title": "rat a la broche",
+          "ingredients": [
+            {
+              "name": "rat propre",
+              "quantity": "2",
+              "unit": "objet"
+            },
+            {
+              "name": "sel",
+              "quantity": "1",
+              "unit": "gramme"
+            },
+            {
+              "name": "persil",
+              "quantity": "2",
+              "unit": "millilitre"
+            },
+            {
+              "name": "ail",
+              "quantity": "1",
+              "unit": "pincée"
+            }
+          ],
+          "id": "8c9750e6-088c-46ab-953c-f5a7a6ff2e1a",
+          "gastronomy": "France"
         }
       ]
     },
@@ -101,7 +132,8 @@
               "quantity": 1,
               "unit": "UNIT_CUBE"
             }
-          ]
+          ],
+          "gastronomy": "Chine"
         },
         {
           "id": "79a5b0f2-4a3d-4411-ba47-c099692aec97",
@@ -122,7 +154,8 @@
               "quantity": 1,
               "unit": "UNIT_PINCH"
             }
-          ]
+          ],
+          "gastronomy": "Chine"
         }
       ]
     },
@@ -148,7 +181,8 @@
               "quantity": 1,
               "unit": "UNIT_OBJECT"
             }
-          ]
+          ],
+          "gastronomy": "Italie"
         },
         {
           "id": "1f5b1824-8c81-4980-9fb7-71b6a5c4a6d1",
@@ -174,7 +208,8 @@
               "quantity": 1,
               "unit": "UNIT_POD"
             }
-          ]
+          ],
+          "gastronomy": "Italie"
         }
       ]
     },
@@ -190,7 +225,8 @@
               "unit": "UNIT_OBJECT"
             }
           ],
-          "id": "51b7a0b6-a264-41e7-b01f-13db6f7d2472"
+          "id": "51b7a0b6-a264-41e7-b01f-13db6f7d2472",
+          "gastronomy": "Russe"
         }
       ]
     }
