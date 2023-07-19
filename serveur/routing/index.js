@@ -15,5 +15,5 @@ router.patch('/recipes/:id', updateRecipesCtrl);
 // Supprimer une recette selon son id
 router.delete('/recipes/:id', deleteRecipesCtrl);
 // Renvoyer vers la page par défaut pour tous les autres cas
-router.get('*', (req, res) => res.redirect('/recipes'));
+router.get('*', (req, res) => res.redirect('/'));
 module.exports = router;

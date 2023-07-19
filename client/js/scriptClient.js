@@ -1,7 +1,6 @@
 import { createMarkup } from "../utils/dom.js";
 var elyes = "je m'apelle elyes et j'aime les var et dynamiter git et les joint de culasse a la masse"
 console.log(`elyes`,elyes);
-
 const endPoint = "https://localhost:4443"
 let arrayDataRecipes = [];
 /** 
