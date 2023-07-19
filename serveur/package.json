@@ -1,0 +1,23 @@
+{
+  "name": "cours-nodejs",
+  "version": "0.0.0-beta.0",
+  "description": "",
+  "main": "bin/www",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node serveur/bin/www",
+    "dev": "cross-env NODE_ENV=development nodemon serveur/bin/www"
+  },
+  "keywords": [],
+  "author": "Dahamna Sofiane <dahamnasofiane@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "crypto": "^1.0.1",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
