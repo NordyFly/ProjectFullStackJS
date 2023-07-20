@@ -4,22 +4,11 @@
 
 
 
-## Installation
-
 ## SERVEUR :
 
 ### Pour installer le serveur :
 
-ouvrir le dossier 'serveur' dans VScode
-
-copier/coller les fichiers de 'env' (et corriger l'extension des copies)
-
-renseignez les ports (dev : 8080/4443 - prod : 80/443) dans ces fichiers
-
-installer le certificat et la key ssl (default.crt et default.key) dans le dossier 'ssl'
-
 ouvrir un terminal dans le dossier 'serveur'
-
 
 ```bash
   npm i
@@ -36,9 +25,9 @@ ouvrir un terminal dans le dossier 'serveur'
 
 ### Pour lancer le client :
 
-Ouvrir le dossier 'client' dans vs code et lancer 'index.html' avec live server
+Ouvrir le dossier racine du projet dans vscode
 
-ou, lancer 'index.html' avec un serveur web
+lancer index.html du dossier client avec live server
 
 
     
